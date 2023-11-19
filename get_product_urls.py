@@ -371,8 +371,5 @@ def main():
     print("Completed.")
 
 
-# if __name__ == "__main__":
-#     main()
-
-# firefox_browser = Firefox()
-# firefox_browser.get("https://www.reuter.com/fr-fr")
+if __name__ == "__main__":
+    main()
