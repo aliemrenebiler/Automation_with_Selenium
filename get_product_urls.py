@@ -346,7 +346,7 @@ def create_query_url(url, query, code):
     return f"{cleared_url}/{cleared_query}"
 
 
-def find_element(browser: webdriver, product_element):
+def find_href_in_element(browser: webdriver, product_element):
     "Finds the specified html item with class name."
 
     return (
@@ -406,7 +406,7 @@ def main():
                     firefox_browser.get(query_url)
 
                     # Get product URL from HTML
-                    product_url = find_element(
+                    product_url = find_href_in_element(
                         firefox_browser,
                         website["product_element"],
                     )
