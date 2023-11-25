@@ -185,6 +185,32 @@ WEBSITES = [
             '//div[@class="product-wrap product-category cola-sm-10 cola-md-5 cola-xl-2"]/a',
         ),
     },
+    {
+        "url": "https://www.obadis.com",
+        "query": lambda code: f"/de/catalogsearch/result/?q={code}",
+        "product_element": (
+            By.CLASS_NAME,
+            "product-item-link",
+        ),
+    },
+    {
+        "url": "https://www.skybad.de",
+        "query": lambda code: f"/catalogsearch/result/?q={code}",
+        "product_element": (
+            By.CLASS_NAME,
+            "product-item-link",
+        ),
+    },
+    # -----------------------------------------------
+    # Does not work properly if there is only one search result, it redirects
+    # {
+    #     "url": "https://www.qssupplies.co.uk/",
+    #     "query": lambda code: f"/searchresult.aspx?searchkey={code}",
+    #     "product_element": (
+    #         By.XPATH,
+    #         '//div[@class="newgrid-prod-details"]//a',
+    #     ),
+    # },
     # -----------------------------------------------
     # This website finds other matches too
     # {
@@ -219,36 +245,6 @@ WEBSITES = [
     #     "product_element": (
     #         By.CLASS_NAME,
     #         "",
-    #     ),
-    # },
-    # -----------------------------------------------
-    # It works, but if there is one product, it directs to the product page and cannot find it
-    # {
-    #     "url": "https://www.obadis.com",
-    #     "query": lambda code: f"/de/catalogsearch/result/?q={code}",
-    #     "product_element": (
-    #         By.CLASS_NAME,
-    #         "product-item-link",
-    #     ),
-    # },
-    # -----------------------------------------------
-    # It works, but if there is one product, it directs to the product page and cannot find it
-    # {
-    #     "url": "https://www.skybad.de",
-    #     "query": lambda code: f"/catalogsearch/result/?q={code}",
-    #     "product_element": (
-    #         By.CLASS_NAME,
-    #         "product-item-link",
-    #     ),
-    # },
-    # -----------------------------------------------
-    # It works, but if there is one product, it directs to the product page and cannot find it
-    # {
-    #     "url": "https://www.qssupplies.co.uk/",
-    #     "query": lambda code: f"/searchresult.aspx?searchkey={code}",
-    #     "product_element": (
-    #         By.XPATH,
-    #         '//div[@class="newgrid-prod-details"]//a',
     #     ),
     # },
     # -----------------------------------------------
@@ -405,11 +401,16 @@ def main():
                     # Get search page
                     active_browser.get(query_url)
 
-                    # Get product URL from HTML
-                    product_url = find_href_in_element(
-                        active_browser,
-                        website["product_element"],
-                    )
+                    # Check if the search was redirected
+                    if active_browser.current_url != query_url:
+                        # If redirected, the product URL is the redirected URL
+                        product_url = active_browser.current_url
+                    else:
+                        # Else, get product URL from HTML
+                        product_url = find_href_in_element(
+                            active_browser,
+                            website["product_element"],
+                        )
 
                     # Add product URL to excel
                     sheet[
