@@ -375,16 +375,16 @@ def main():
     ]
 
     # Create browser
-    firefox_browser = webdriver.Chrome()
+    active_browser = webdriver.Chrome()
 
     for website_index, website in enumerate(WEBSITES):
         try:
             # Get main page
-            firefox_browser.get(website["url"])
+            active_browser.get(website["url"])
 
             # Close pop-up at start for the website
             if "startup_close_element" in website.keys():
-                close_popup(firefox_browser, website["startup_close_element"])
+                close_popup(active_browser, website["startup_close_element"])
 
             # Add website to excel file
             sheet[
@@ -403,11 +403,11 @@ def main():
                     )
 
                     # Get search page
-                    firefox_browser.get(query_url)
+                    active_browser.get(query_url)
 
                     # Get product URL from HTML
                     product_url = find_href_in_element(
-                        firefox_browser,
+                        active_browser,
                         website["product_element"],
                     )
 
@@ -428,7 +428,7 @@ def main():
 
     # Close excel and browser
     workbook.close()
-    firefox_browser.close()
+    active_browser.close()
 
     print("Completed.")
 
