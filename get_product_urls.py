@@ -10,7 +10,7 @@ This is an excel file generator for bathroom products.
 
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-from selenium.webdriver import Firefox
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -267,7 +267,7 @@ TIMEOUT = 3
 # ----------------------------
 
 
-def close_popup(browser: Firefox, close_element):
+def close_popup(browser: webdriver, close_element):
     "Handles the cookie pop up for specified page."
 
     WebDriverWait(browser, TIMEOUT).until(
@@ -284,7 +284,7 @@ def create_query_url(url, query, code):
     return f"{cleared_url}/{cleared_query}"
 
 
-def find_element(browser: Firefox, product_element):
+def find_element(browser: webdriver, product_element):
     "Finds the specified html item with class name."
 
     return (
@@ -313,7 +313,7 @@ def main():
     ]
 
     # Create browser
-    firefox_browser = Firefox()
+    firefox_browser = webdriver.Chrome()
 
     for website_index, website in enumerate(WEBSITES):
         try:
