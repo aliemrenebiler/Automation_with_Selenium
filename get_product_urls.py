@@ -201,6 +201,14 @@ WEBSITES = [
             "product-item-link",
         ),
     },
+    {
+        "url": "https://www.batinea.com",
+        "query": lambda code: f"/search/{code}",
+        "product_element": (
+            By.XPATH,
+            '//div[@class="products wrapper grid products-grid"]//li//a',
+        ),
+    },
     # -----------------------------------------------
     # Does not work properly if there is only one search result, it redirects
     # {
@@ -259,16 +267,6 @@ WEBSITES = [
     #     "product_element": (
     #         By.XPATH,
     #         '//div[@id="js-product-listing"]/div/ul/li/a',
-    #     ),
-    # },
-    # -----------------------------------------------
-    # Somewhat it does not work
-    # {
-    #     "url": "https://www.batinea.com",
-    #     "query": lambda code: f"/search/{code}",
-    #     "product_element": (
-    #         By.XPATH,
-    #         '//div[@class="products"]/ol/li/div/div/a',
     #     ),
     # },
     # -----------------------------------------------
