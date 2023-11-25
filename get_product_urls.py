@@ -121,66 +121,70 @@ WEBSITES = [
             '//div[@class="product"]//a',
         ),
     },
-    # {
-    #     "url": "https://www.qssupplies.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.ukbathrooms.com/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.manomano.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.manomano.de/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.plumbnation.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.tradingdepot.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.bathroomsuppliesonline.com/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.ergonomicdesigns.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.homesupply.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.rubberduckbathrooms.co.uk/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.amazon.it/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
-    # {
-    #     "url": "https://www.deghi.it/",
-    #     "query": lambda code: f"",
-    #     "class_name": "",
-    # },
+    {
+        "url": "https://www.ukbathrooms.com/",
+        "query": lambda code: f"/shop/search.html?sq={code}",
+        "product_element": (
+            By.CLASS_NAME,
+            "box--image__name",
+        ),
+    },
+    {
+        "url": "https://www.plumbnation.co.uk/",
+        "query": lambda code: f"/search?q={code}",
+        "product_element": (
+            By.CLASS_NAME,
+            "product-card-link",
+        ),
+    },
+    {
+        "url": "https://www.bathroomsuppliesonline.com/",
+        "query": lambda code: f"/?search={code}",
+        "product_element": (
+            By.CLASS_NAME,
+            "itemName",
+        ),
+    },
+    {
+        "url": "https://www.ergonomicdesigns.co.uk/",
+        "query": lambda code: f"/search.html?qs={code}",
+        "startup_close_element": (
+            By.ID,
+            "CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll",
+        ),
+        "product_element": (
+            By.XPATH,
+            '//div[@class="c-product"]//a',
+        ),
+    },
+    {
+        "url": "https://www.homesupply.co.uk/",
+        "query": lambda code: f"/search.php?pg=1&stext={code}",
+        "product_element": (
+            By.XPATH,
+            '//div[@class="product"]//a',
+        ),
+    },
+    {
+        "url": "https://www.amazon.it/",
+        "query": lambda code: f"/s?k={code}",
+        "product_element": (
+            By.XPATH,
+            '//div[@data-component-type="s-search-result"]//a',
+        ),
+    },
+    {
+        "url": "https://www.deghi.it/",
+        "query": lambda code: f"/ricerca?term={code}&c_id=0",
+        "startup_close_element": (
+            By.ID,
+            "CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll",
+        ),
+        "product_element": (
+            By.XPATH,
+            '//div[@class="product-wrap product-category cola-sm-10 cola-md-5 cola-xl-2"]/a',
+        ),
+    },
     # -----------------------------------------------
     # This website finds other matches too
     # {
@@ -208,6 +212,16 @@ WEBSITES = [
     #     "query": lambda code: f"/keyword.php?keyword={code}",
     # },
     # -----------------------------------------------
+    # This website finds other matches too
+    # {
+    #     "url": "https://www.tradingdepot.co.uk/",
+    #     "query": lambda code: f"/search/?q={code}",
+    #     "product_element": (
+    #         By.CLASS_NAME,
+    #         "",
+    #     ),
+    # },
+    # -----------------------------------------------
     # It works, but if there is one product, it directs to the product page and cannot find it
     # {
     #     "url": "https://www.obadis.com",
@@ -225,6 +239,16 @@ WEBSITES = [
     #     "product_element": (
     #         By.CLASS_NAME,
     #         "product-item-link",
+    #     ),
+    # },
+    # -----------------------------------------------
+    # It works, but if there is one product, it directs to the product page and cannot find it
+    # {
+    #     "url": "https://www.qssupplies.co.uk/",
+    #     "query": lambda code: f"/searchresult.aspx?searchkey={code}",
+    #     "product_element": (
+    #         By.XPATH,
+    #         '//div[@class="newgrid-prod-details"]//a',
     #     ),
     # },
     # -----------------------------------------------
@@ -252,6 +276,16 @@ WEBSITES = [
     #     ),
     # },
     # -----------------------------------------------
+    # Somewhat it does not work, also slow
+    # {
+    #     "url": "https://www.rubberduckbathrooms.co.uk/",
+    #     "query": lambda code: f"/products_search.php?search_string={code}",
+    #     "product_element": (
+    #         By.XPATH,
+    #         '//h2[@class="product-item-title "]/a',
+    #     ),
+    # },
+    # -----------------------------------------------
     # Too slow, need to log in
     # {
     #     "url": "https://www.showroomprive.com/",
@@ -259,6 +293,34 @@ WEBSITES = [
     #     "product_element": (
     #         By.ID,
     #         "agree_button",
+    #     ),
+    # },
+    # -----------------------------------------------
+    # Too slow
+    # {
+    #     "url": "https://www.manomano.co.uk/",
+    #     "query": lambda code: f"/search/{code}",
+    #     "startup_close_element": (
+    #         By.ID,
+    #         "didomi-notice-agree-button",
+    #     ),
+    #     "product_element": (
+    #         By.CLASS_NAME,
+    #         "oFBZUY",
+    #     ),
+    # },
+    # -----------------------------------------------
+    # Too slow
+    # {
+    #     "url": "https://www.manomano.de/",
+    #     "query": lambda code: f"/search/{code}",
+    #     "startup_close_element": (
+    #         By.ID,
+    #         "didomi-notice-agree-button",
+    #     ),
+    #     "product_element": (
+    #         By.CLASS_NAME,
+    #         "oFBZUY",
     #     ),
     # },
     # -----------------------------------------------
