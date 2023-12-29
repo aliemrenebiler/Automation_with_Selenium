@@ -420,8 +420,8 @@ def main():
                     workbook.save(EXCEL_FILE_PATH)
                 except Exception:
                     print(
-                        f'Could not add "{product_code}" to excel file \
-                            for "{website["url"]}" website.'
+                        f'Could not add "{product_code}" to excel file '
+                        + f'for "{website["url"]}" website.'
                     )
         except Exception:
             print(f'Unexpected error for "{website["url"]}".')
