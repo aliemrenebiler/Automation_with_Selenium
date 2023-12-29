@@ -1,4 +1,4 @@
-# Get Products with Selenium
+# Automation with Selenium
 
 This is an excel file generator for bathroom products.
 
