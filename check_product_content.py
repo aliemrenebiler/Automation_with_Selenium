@@ -40,9 +40,11 @@ WEBSITES = {
     },
 }
 TIMEOUT = 3
+
+
 # ----------------------------
-
-
+# FOR TRENDYOL
+# ----------------------------
 def login_to_trendyol(browser: webdriver, email: str, password: str):
     "Logins to Trendyol"
 
@@ -84,6 +86,9 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
     )
 
 
+# ----------------------------
+# FOR HEPSIBURADA
+# ----------------------------
 def login_to_hepsiburada(browser: webdriver, email: str, password: str):
     "Logins to HepsiBurada"
 
@@ -150,6 +155,9 @@ def get_product_url_from_hepsiburada(browser: webdriver, product_code: str) -> s
     )
 
 
+# ----------------------------
+# MAIN
+# ----------------------------
 def main():
     "Main code"
 
