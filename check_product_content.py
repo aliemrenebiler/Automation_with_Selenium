@@ -88,8 +88,45 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
     )
 
 
+def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str:
+    "Gets the URL of the product with specified code from Trendyol"
+
+    browser.get("https://partner.trendyol.com/product-listing/all-products")
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//input[@id="61m07b2ggmu"]',
+            )
+        )
+    ).send_keys(product_code)
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//bl-button[@cy-id="submitFilter"]',
+            )
+        )
+    ).click()
+
+    return (
+        WebDriverWait(browser, TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@class="product-info__content"]//a',
+                )
+            )
+        )
+        .get_attribute("href")
+    )
+
+
 # ----------------------------
-# FOR HEPSIBURADA
+# FOR HEPSI BURADA
 # ----------------------------
 def login_to_hepsiburada(browser: webdriver, email: str, password: str):
     "Logins to HepsiBurada"
@@ -138,6 +175,8 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
 
 
 def get_product_url_from_hepsiburada(browser: webdriver, product_code: str) -> str:
+    "Gets the URL of the product with specified code from Hepsi Burada"
+
     browser.get(
         "https://merchant.hepsiburada.com/v2/listings?"
         + f"tab=onSale&page=1&pageSize=10&search={product_code}"
