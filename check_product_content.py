@@ -222,37 +222,57 @@ def main():
     # Create browser
     active_browser = webdriver.Chrome()
 
-    # Login to Trendyol
-    login_to_trendyol(
-        active_browser,
-        WEBSITES["trendyol"]["username"],
-        WEBSITES["trendyol"]["password"],
-    )
+    try:
+        # Login to Trendyol
+        login_to_trendyol(
+            active_browser,
+            WEBSITES["trendyol"]["username"],
+            WEBSITES["trendyol"]["password"],
+        )
 
-    # Login to Hepsi Burada
-    login_to_hepsiburada(
-        active_browser,
-        WEBSITES["hepsiburada"]["username"],
-        WEBSITES["hepsiburada"]["password"],
-    )
+        # Login to Hepsi Burada
+        login_to_hepsiburada(
+            active_browser,
+            WEBSITES["hepsiburada"]["username"],
+            WEBSITES["hepsiburada"]["password"],
+        )
 
-    for product_index, product_code in enumerate(product_codes):
-        ...
-        # Get Trendyol product URL
+        for product_index, product_code in enumerate(product_codes):
+            # Get Trendyol product URL
+            product_url = get_product_url_from_trendyol(active_browser, product_code)
 
-        # Save URL to excel
+            # Add product URL to excel
+            sheet[
+                get_column_letter(
+                    WEBSITES["trendyol"]["url_col_number"],
+                )
+                + str(product_index + PRODUCTS_START_ROW_NUMBER)
+            ] = product_url
 
-        # Get product name and description
+            # Get product name and description
 
-        # Update excel file
+            # Update excel file
 
-        # Get Hepsi Burada product URL
+            # Get Hepsi Burada product URL
+            product_url = get_product_url_from_hepsiburada(active_browser, product_code)
 
-        # Save URL to excel
+            # Add product URL to excel
+            sheet[
+                get_column_letter(
+                    WEBSITES["hepsiburada"]["url_col_number"],
+                )
+                + str(product_index + PRODUCTS_START_ROW_NUMBER)
+            ] = product_url
 
-        # Get product name and description
+            # Get product name and description
 
-        # Update excel file
+            # Update excel file
+
+            # Save excel file
+            workbook.save(EXCEL_FILE_PATH)
+
+    except Exception:
+        print("An unexpected error occured.")
 
     # Close excel and browser
     workbook.close()
