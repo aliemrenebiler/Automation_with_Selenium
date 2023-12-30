@@ -26,11 +26,15 @@ PRODUCT_CODES_COL_NUMBER = 2
 PRODUCT_NAMES_COL_NUMBER = 3
 WEBSITES = {
     "trendyol": {
+        "username": "",
+        "password": "",
         "name_col_number": 4,
         "desc_col_number": 5,
         "image_col_number": 6,
     },
     "hepsiburada": {
+        "username": "",
+        "password": "",
         "name_col_number": 7,
         "desc_col_number": 8,
         "image_col_number": 9,
@@ -83,7 +87,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//div[@class="input-container large"]//input',
+                '//input[@id="username"]',
             )
         )
     ).send_keys(email)
@@ -92,8 +96,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//button[@class="hb-btn large primary login-button '
-                + 'new-login-button g-recaptcha "]',
+                '//button[@id="merchant-sign-in-button"]',
             )
         )
     ).click()
@@ -102,7 +105,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//div[@class="input-container large"]//input',
+                '//input[@id="password"]',
             )
         )
     ).send_keys(password)
@@ -111,8 +114,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//button[@class="hb-btn large primary login-button '
-                + 'new-login-button g-recaptcha "]',
+                '//button[@id="merchant-sign-in-button"]',
             )
         )
     ).click()
@@ -124,7 +126,17 @@ def main():
     # Create browser
     active_browser = webdriver.Chrome()
 
-    login_to_trendyol(active_browser, "alemre", "123")
+    login_to_trendyol(
+        active_browser,
+        WEBSITES["trendyol"]["username"],
+        WEBSITES["trendyol"]["password"],
+    )
+
+    login_to_hepsiburada(
+        active_browser,
+        WEBSITES["hepsiburada"]["username"],
+        WEBSITES["hepsiburada"]["password"],
+    )
 
     sleep(5)
 
