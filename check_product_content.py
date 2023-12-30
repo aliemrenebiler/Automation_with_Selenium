@@ -143,7 +143,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).send_keys(email)
 
-    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
+    WebDriverWait(browser, TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -152,7 +152,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
