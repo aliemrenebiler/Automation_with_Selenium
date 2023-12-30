@@ -143,7 +143,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).send_keys(email)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -170,7 +170,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
+    WebDriverWait(browser, TIMEOUT).until(
         EC.url_to_be("https://merchant.hepsiburada.com/v2/dashboard")
         or EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
     )
