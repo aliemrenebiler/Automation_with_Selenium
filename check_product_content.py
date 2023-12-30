@@ -42,7 +42,7 @@ WEBSITES = {
     },
 }
 TIMEOUT = 10
-CAPTCHA_TIMEOUT = 60
+CAPTCHA_TIMEOUT = 300
 
 
 # ----------------------------
