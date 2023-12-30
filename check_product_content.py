@@ -27,6 +27,7 @@ WEBSITES = {
     "trendyol": {
         "username": "",
         "password": "",
+        "url_col_number": 0,
         "name_col_number": 4,
         "desc_col_number": 5,
         "image_col_number": 6,
@@ -34,6 +35,7 @@ WEBSITES = {
     "hepsiburada": {
         "username": "",
         "password": "",
+        "url_col_number": 0,
         "name_col_number": 7,
         "desc_col_number": 8,
         "image_col_number": 9,
