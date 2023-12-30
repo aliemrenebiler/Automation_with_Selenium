@@ -41,7 +41,8 @@ WEBSITES = {
         "image_col_number": 9,
     },
 }
-TIMEOUT = 3
+TIMEOUT = 10
+CAPTCHA_TIMEOUT = 60
 
 
 # ----------------------------
@@ -80,7 +81,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
         EC.url_to_be(
             "https://partner.trendyol.com/account/info"
             + "?tab=contractAndDocuments&openApproveModal=true"
@@ -169,8 +170,9 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
-        EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
+    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
+        EC.url_to_be("https://merchant.hepsiburada.com/v2/dashboard")
+        or EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
     )
 
 
