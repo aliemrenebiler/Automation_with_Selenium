@@ -97,7 +97,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str:
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//input[@id="61m07b2ggmu"]',
+                '//bl-input[@cy-id="stockCodeFilter"]//input',
             )
         )
     ).send_keys(product_code)
