@@ -42,7 +42,7 @@ WEBSITES = {
     },
 }
 TIMEOUT = 10
-CAPTCHA_TIMEOUT = 300
+LOGIN_TIMEOUT = 300
 
 
 # ----------------------------
@@ -53,7 +53,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
 
     browser.get("https://partner.trendyol.com/account/login")
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -62,7 +62,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
         )
     ).send_keys(email)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -71,7 +71,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
         )
     ).send_keys(password)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -81,7 +81,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.url_to_be(
             "https://partner.trendyol.com/account/info"
             + "?tab=contractAndDocuments&openApproveModal=true"
@@ -134,7 +134,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
 
     browser.get("https://merchant.hepsiburada.com/v2/login")
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -143,7 +143,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).send_keys(email)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -152,7 +152,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, CAPTCHA_TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -161,7 +161,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).send_keys(password)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -170,7 +170,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
         EC.url_to_be("https://merchant.hepsiburada.com/v2/dashboard")
         or EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
     )
