@@ -8,7 +8,6 @@ This is an content checker for bathroom products.
 
 # pylint: disable=broad-except
 
-from time import sleep
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from selenium import webdriver
@@ -77,6 +76,13 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
         )
     ).click()
 
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.url_to_be(
+            "https://partner.trendyol.com/account/info"
+            + "?tab=contractAndDocuments&openApproveModal=true"
+        )
+    )
+
 
 def login_to_hepsiburada(browser: webdriver, email: str, password: str):
     "Logins to HepsiBurada"
@@ -119,27 +125,86 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
         )
     ).click()
 
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
+    )
+
+
+def get_product_url_from_hepsiburada(browser: webdriver, product_code: str) -> str:
+    browser.get(
+        "https://merchant.hepsiburada.com/v2/listings?"
+        + f"tab=onSale&page=1&pageSize=10&search={product_code}"
+    )
+
+    return (
+        WebDriverWait(browser, TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@class="card-text two-line"]//a',
+                )
+            )
+        )
+        .get_attribute("href")
+    )
+
 
 def main():
     "Main code"
 
+    # Open excel file
+    workbook = load_workbook(EXCEL_FILE_PATH)
+    try:
+        sheet = workbook[SHEET_NAME]
+    except Exception:
+        sheet = workbook.active
+
+    # Get product codes
+    product_codes = [
+        cell.value
+        for cell in sheet[get_column_letter(PRODUCT_CODES_COL_NUMBER)][
+            PRODUCTS_START_ROW_NUMBER - 1 :
+        ]
+    ]
+
     # Create browser
     active_browser = webdriver.Chrome()
 
+    # Login to Trendyol
     login_to_trendyol(
         active_browser,
         WEBSITES["trendyol"]["username"],
         WEBSITES["trendyol"]["password"],
     )
 
+    # Login to Hepsi Burada
     login_to_hepsiburada(
         active_browser,
         WEBSITES["hepsiburada"]["username"],
         WEBSITES["hepsiburada"]["password"],
     )
 
-    sleep(5)
+    for product_index, product_code in enumerate(product_codes):
+        ...
+        # Get Trendyol product URL
 
+        # Save URL to excel
+
+        # Get product name and description
+
+        # Update excel file
+
+        # Get Hepsi Burada product URL
+
+        # Save URL to excel
+
+        # Get product name and description
+
+        # Update excel file
+
+    # Close excel and browser
+    workbook.close()
     active_browser.close()
 
     print("Completed.")
