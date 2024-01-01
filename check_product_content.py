@@ -245,6 +245,44 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
         return None
 
 
+def get_product_info_from_trendyol(browser: webdriver, product_url: str) -> (str, str):
+    "Gets the product name and description on Trendyol"
+
+    browser.get(product_url)
+
+    product_name = (
+        WebDriverWait(browser, DEFAULT_TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@class="product-detail-wrapper"]//h1[@class="pr-new-br"]/span',
+                )
+            )
+        )
+        .text
+    )
+
+    product_desc_child_elements = (
+        WebDriverWait(browser, DEFAULT_TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@id="rich-content-wrapper"]',
+                )
+            )
+        )
+        .find_elements(By.XPATH, "*")
+    )
+
+    product_desc = "".join(
+        [child.get_attribute("outerHTML") for child in product_desc_child_elements]
+    )
+
+    return product_name, product_desc
+
+
 # ----------------------------
 # FOR HEPSI BURADA
 # ----------------------------
@@ -321,6 +359,46 @@ def get_product_url_from_hepsiburada(
         return product_url
     except Exception:
         return None
+
+
+def get_product_info_from_hepsiburada(
+    browser: webdriver, product_url: str
+) -> (str, str):
+    "Gets the product name and description on Hepsi Burada"
+
+    browser.get(product_url)
+
+    product_name = (
+        WebDriverWait(browser, DEFAULT_TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//h1[@id="product-name"]',
+                )
+            )
+        )
+        .text
+    )
+
+    product_desc_child_elements = (
+        WebDriverWait(browser, DEFAULT_TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@id="productDescriptionContent"]',
+                )
+            )
+        )
+        .find_elements(By.XPATH, "*")
+    )
+
+    product_desc = "".join(
+        [child.get_attribute("outerHTML") for child in product_desc_child_elements]
+    )
+
+    return product_name, product_desc
 
 
 # ----------------------------
