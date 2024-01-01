@@ -7,11 +7,11 @@ This is an content checker for bathroom products.
 """
 
 # pylint: disable=broad-except
+# pylint: disable=broad-exception-raised
 
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from selenium import webdriver
-from selenium.common import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -235,7 +235,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
             .get_attribute("href")
         )
         return product_url
-    except TimeoutException:
+    except Exception:
         return None
 
 
@@ -313,7 +313,7 @@ def get_product_url_from_hepsiburada(
             .get_attribute("href")
         )
         return product_url
-    except TimeoutException:
+    except Exception:
         return None
 
 
@@ -357,35 +357,57 @@ def main():
         )
 
         for product_index, product_code in enumerate(product_codes):
-            # Get Trendyol product URL
-            product_url = get_product_url_from_trendyol(active_browser, product_code)
-
-            # Add product URL to excel
-            sheet[
-                get_column_letter(
-                    WEBSITES["trendyol"]["url_col_number"],
+            try:
+                # Get Trendyol product URL
+                product_url = get_product_url_from_trendyol(
+                    active_browser, product_code
                 )
-                + str(product_index + PRODUCTS_START_ROW_NUMBER)
-            ] = product_url
 
-            # Get product name and description
+                # Raise exception if product URL was not found
+                if not product_url:
+                    raise Exception(
+                        f"Could not found product on Trendyol: {product_code}"
+                    )
 
-            # Update excel file
+                # Add product URL to excel
+                sheet[
+                    get_column_letter(
+                        WEBSITES["trendyol"]["url_col_number"],
+                    )
+                    + str(product_index + PRODUCTS_START_ROW_NUMBER)
+                ] = product_url
 
-            # Get Hepsi Burada product URL
-            product_url = get_product_url_from_hepsiburada(active_browser, product_code)
+                # Get product name and description
 
-            # Add product URL to excel
-            sheet[
-                get_column_letter(
-                    WEBSITES["hepsiburada"]["url_col_number"],
+                # Update excel file
+            except Exception as error:
+                print(str(error))
+
+            try:
+                # Get Hepsi Burada product URL
+                product_url = get_product_url_from_hepsiburada(
+                    active_browser, product_code
                 )
-                + str(product_index + PRODUCTS_START_ROW_NUMBER)
-            ] = product_url
 
-            # Get product name and description
+                # Raise exception if product URL was not found
+                if not product_url:
+                    raise Exception(
+                        f"Could not found product on Hepsi Burada: {product_code}"
+                    )
 
-            # Update excel file
+                # Add product URL to excel
+                sheet[
+                    get_column_letter(
+                        WEBSITES["hepsiburada"]["url_col_number"],
+                    )
+                    + str(product_index + PRODUCTS_START_ROW_NUMBER)
+                ] = product_url
+
+                # Get product name and description
+
+                # Update excel file
+            except Exception as error:
+                print(str(error))
 
             # Save excel file
             workbook.save(EXCEL_FILE_PATH)
