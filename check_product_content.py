@@ -11,6 +11,7 @@ This is an content checker for bathroom products.
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -197,7 +198,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
     )
 
 
-def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str:
+def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
 
     browser.get("https://partner.trendyol.com/product-listing/all-products")
@@ -220,18 +221,22 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str:
         )
     ).click()
 
-    return (
-        WebDriverWait(browser, TIMEOUT)
-        .until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    "//sc-product-info",
+    try:
+        product_url = (
+            WebDriverWait(browser, TIMEOUT)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        "//sc-product-info",
+                    )
                 )
             )
+            .get_attribute("href")
         )
-        .get_attribute("href")
-    )
+        return product_url
+    except TimeoutException:
+        return None
 
 
 # ----------------------------
@@ -284,7 +289,9 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
     )
 
 
-def get_product_url_from_hepsiburada(browser: webdriver, product_code: str) -> str:
+def get_product_url_from_hepsiburada(
+    browser: webdriver, product_code: str
+) -> str | None:
     "Gets the URL of the product with specified code from Hepsi Burada"
 
     browser.get(
@@ -292,18 +299,22 @@ def get_product_url_from_hepsiburada(browser: webdriver, product_code: str) -> s
         + f"tab=onSale&page=1&pageSize=10&search={product_code}"
     )
 
-    return (
-        WebDriverWait(browser, TIMEOUT)
-        .until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//div[@class="card-text two-line"]//a',
+    try:
+        product_url = (
+            WebDriverWait(browser, TIMEOUT)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@class="card-text two-line"]//a',
+                    )
                 )
             )
+            .get_attribute("href")
         )
-        .get_attribute("href")
-    )
+        return product_url
+    except TimeoutException:
+        return None
 
 
 # ----------------------------
