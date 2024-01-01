@@ -82,7 +82,8 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
     ).click()
 
     WebDriverWait(browser, LOGIN_TIMEOUT).until(
-        EC.url_to_be(
+        EC.url_to_be("https://partner.trendyol.com/dashboard")
+        or EC.url_to_be(
             "https://partner.trendyol.com/account/info"
             + "?tab=contractAndDocuments&openApproveModal=true"
         )
