@@ -20,30 +20,30 @@ from selenium.webdriver.support import expected_conditions as EC
 # ----------------------------
 # COFIGURATIONS
 # ----------------------------
-EXCEL_FILE_PATH = "/Users/aliemrenebiler/Desktop/vitra_temp.xlsx"
-SHEET_NAME = "Sheet1"
-PRODUCTS_START_ROW_NUMBER = 2
-PRODUCT_CODES_COL_NUMBER = 2
-PRODUCT_NAMES_COL_NUMBER = 3
+EXCEL_FILE_PATH = "/path/to/file.xlsx"
+SHEET_NAME = "sheet_name"
+PRODUCTS_START_ROW_NUMBER = 0
+PRODUCT_CODES_COL_NUMBER = 0
+PRODUCT_NAMES_COL_NUMBER = 0
 WEBSITES = {
     "trendyol": {
-        "username": "",
-        "password": "",
+        "username": "user",
+        "password": "pswrd",
         "url_col_number": 0,
-        "name_col_number": 4,
-        "desc_col_number": 5,
-        "image_col_number": 6,
+        "name_col_number": 0,
+        "desc_col_number": 0,
+        "image_col_number": 0,
     },
     "hepsiburada": {
-        "username": "",
-        "password": "",
+        "username": "user",
+        "password": "pswrd",
         "url_col_number": 0,
-        "name_col_number": 7,
-        "desc_col_number": 8,
-        "image_col_number": 9,
+        "name_col_number": 0,
+        "desc_col_number": 0,
+        "image_col_number": 0,
     },
 }
-TIMEOUT = 10
+TIMEOUT = 3
 LOGIN_TIMEOUT = 300
 
 
@@ -200,32 +200,31 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
 
 def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
-
-    if (
-        browser.current_url
-        != "https://partner.trendyol.com/product-listing/all-products"
-    ):
-        browser.get("https://partner.trendyol.com/product-listing/all-products")
-
-    WebDriverWait(browser, TIMEOUT).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//bl-input[@cy-id="stockCodeFilter"]',
-            )
-        )
-    ).send_keys(product_code)
-
-    WebDriverWait(browser, TIMEOUT).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//bl-button[@cy-id="submitFilter"]',
-            )
-        )
-    ).click()
-
     try:
+        if (
+            browser.current_url
+            != "https://partner.trendyol.com/product-listing/all-products"
+        ):
+            browser.get("https://partner.trendyol.com/product-listing/all-products")
+
+        WebDriverWait(browser, TIMEOUT).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//bl-input[@cy-id="stockCodeFilter"]',
+                )
+            )
+        ).send_keys(product_code)
+
+        WebDriverWait(browser, TIMEOUT).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//bl-button[@cy-id="submitFilter"]',
+                )
+            )
+        ).click()
+
         product_url = (
             WebDriverWait(browser, TIMEOUT)
             .until(
@@ -238,6 +237,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
             )
             .get_attribute("href")
         )
+
         return product_url
     except Exception:
         return None
@@ -297,13 +297,12 @@ def get_product_url_from_hepsiburada(
     browser: webdriver, product_code: str
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsi Burada"
-
-    browser.get(
-        "https://merchant.hepsiburada.com/v2/listings?"
-        + f"tab=onSale&page=1&pageSize=10&search={product_code}"
-    )
-
     try:
+        browser.get(
+            "https://merchant.hepsiburada.com/v2/listings?"
+            + f"tab=onSale&page=1&pageSize=10&search={product_code}"
+        )
+
         product_url = (
             WebDriverWait(browser, TIMEOUT)
             .until(
@@ -316,6 +315,7 @@ def get_product_url_from_hepsiburada(
             )
             .get_attribute("href")
         )
+
         return product_url
     except Exception:
         return None
@@ -347,9 +347,6 @@ def main():
 
     # Maximize the window
     active_browser.maximize_window()
-
-    # Open another tab
-    active_browser.execute_script("window.open('');")
 
     try:
         # Login to Trendyol
