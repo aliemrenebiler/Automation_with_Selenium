@@ -11,6 +11,7 @@ This is an content checker for bathroom products.
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -43,6 +44,112 @@ WEBSITES = {
 }
 TIMEOUT = 10
 LOGIN_TIMEOUT = 300
+
+
+# ----------------------------
+# FOR OMNIENS
+# ----------------------------
+def login_to_omniens(browser: webdriver, email: str, password: str):
+    "Logins to Trendyol"
+
+    browser.get("https://platform.omniens.com/login")
+
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//input[@name="username"]',
+            )
+        )
+    ).send_keys(email)
+
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//input[@name="password"]',
+            )
+        )
+    ).send_keys(password)
+
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//button[@class="login100-form-btn"]',
+            )
+        )
+    ).click()
+
+    WebDriverWait(browser, LOGIN_TIMEOUT).until(
+        EC.url_to_be("https://platform.omniens.com/performance-dashboard")
+    )
+
+
+def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
+    "Gets the URL of the product with specified code from Trendyol"
+
+    browser.get("https://platform.omniens.com/_product/product/list")
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//input[@id="mat-input-54"]',
+            )
+        )
+    ).send_keys(product_code, Keys.ENTER)
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//mat-checkbox[@id="mat-checkbox-2"]',
+            )
+        )
+    ).click()
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//app-split-button[@class="ng-star-inserted"]',
+            )
+        )
+    ).click()
+
+    WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//li[@class="menuitem"]/a[text()="Düzenle"]',
+            )
+        )
+    ).click()
+
+    product_name = (
+        WebDriverWait(browser, TIMEOUT)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//input[@id="mat-input-9"]',
+                )
+            )
+        )
+        .get_attribute("value")
+    )
+
+    product_desc = WebDriverWait(browser, TIMEOUT).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//div[@class="angular-editor-textarea"]',
+            )
+        )
+    )
+
+    return product_name, product_desc
 
 
 # ----------------------------
