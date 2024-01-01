@@ -377,11 +377,11 @@ def main():
                     )
                     + str(product_index + PRODUCTS_START_ROW_NUMBER)
                 ] = product_url
-
-                # Save excel file
-                workbook.save(EXCEL_FILE_PATH)
             except Exception as error:
                 print(str(error))
+
+        # Save excel file
+        workbook.save(EXCEL_FILE_PATH)
 
         # Login to Hepsi Burada
         login_to_hepsiburada(
@@ -411,11 +411,11 @@ def main():
                     )
                     + str(product_index + PRODUCTS_START_ROW_NUMBER)
                 ] = product_url
-
-                # Save excel file
-                workbook.save(EXCEL_FILE_PATH)
             except Exception as error:
                 print(str(error))
+
+        # Save excel file
+        workbook.save(EXCEL_FILE_PATH)
 
     except Exception:
         print("An unexpected error occured.")
