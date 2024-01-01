@@ -201,7 +201,11 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
 def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
 
-    browser.get("https://partner.trendyol.com/product-listing/all-products")
+    if (
+        browser.current_url
+        != "https://partner.trendyol.com/product-listing/all-products"
+    ):
+        browser.get("https://partner.trendyol.com/product-listing/all-products")
 
     WebDriverWait(browser, TIMEOUT).until(
         EC.presence_of_element_located(
@@ -348,9 +352,6 @@ def main():
     active_browser.execute_script("window.open('');")
 
     try:
-        # Change tab
-        active_browser.switch_to.window(active_browser.window_handles[0])
-
         # Login to Trendyol
         login_to_trendyol(
             active_browser,
@@ -358,21 +359,9 @@ def main():
             WEBSITES["trendyol"]["password"],
         )
 
-        # Change tab
-        active_browser.switch_to.window(active_browser.window_handles[1])
-
-        # Login to Hepsi Burada
-        login_to_hepsiburada(
-            active_browser,
-            WEBSITES["hepsiburada"]["username"],
-            WEBSITES["hepsiburada"]["password"],
-        )
-
+        # Get URLs
         for product_index, product_code in enumerate(product_codes):
             try:
-                # Change tab
-                active_browser.switch_to.window(active_browser.window_handles[0])
-
                 # Get Trendyol product URL
                 product_url = get_product_url_from_trendyol(
                     active_browser, product_code
@@ -392,16 +381,21 @@ def main():
                     + str(product_index + PRODUCTS_START_ROW_NUMBER)
                 ] = product_url
 
-                # Get product name and description
-
-                # Update excel file
+                # Save excel file
+                workbook.save(EXCEL_FILE_PATH)
             except Exception as error:
                 print(str(error))
 
-            try:
-                # Change tab
-                active_browser.switch_to.window(active_browser.window_handles[1])
+        # Login to Hepsi Burada
+        login_to_hepsiburada(
+            active_browser,
+            WEBSITES["hepsiburada"]["username"],
+            WEBSITES["hepsiburada"]["password"],
+        )
 
+        # Get URLs
+        for product_index, product_code in enumerate(product_codes):
+            try:
                 # Get Hepsi Burada product URL
                 product_url = get_product_url_from_hepsiburada(
                     active_browser, product_code
@@ -421,14 +415,10 @@ def main():
                     + str(product_index + PRODUCTS_START_ROW_NUMBER)
                 ] = product_url
 
-                # Get product name and description
-
-                # Update excel file
+                # Save excel file
+                workbook.save(EXCEL_FILE_PATH)
             except Exception as error:
                 print(str(error))
-
-            # Save excel file
-            workbook.save(EXCEL_FILE_PATH)
 
     except Exception:
         print("An unexpected error occured.")
