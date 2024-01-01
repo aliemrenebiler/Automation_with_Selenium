@@ -341,13 +341,25 @@ def main():
     # Create browser
     active_browser = webdriver.Chrome()
 
+    # Maximize the window
+    active_browser.maximize_window()
+
+    # Open another tab
+    active_browser.execute_script("window.open('');")
+
     try:
+        # Change tab
+        active_browser.switch_to.window(active_browser.window_handles[0])
+
         # Login to Trendyol
         login_to_trendyol(
             active_browser,
             WEBSITES["trendyol"]["username"],
             WEBSITES["trendyol"]["password"],
         )
+
+        # Change tab
+        active_browser.switch_to.window(active_browser.window_handles[1])
 
         # Login to Hepsi Burada
         login_to_hepsiburada(
@@ -358,6 +370,9 @@ def main():
 
         for product_index, product_code in enumerate(product_codes):
             try:
+                # Change tab
+                active_browser.switch_to.window(active_browser.window_handles[0])
+
                 # Get Trendyol product URL
                 product_url = get_product_url_from_trendyol(
                     active_browser, product_code
@@ -384,6 +399,9 @@ def main():
                 print(str(error))
 
             try:
+                # Change tab
+                active_browser.switch_to.window(active_browser.window_handles[1])
+
                 # Get Hepsi Burada product URL
                 product_url = get_product_url_from_hepsiburada(
                     active_browser, product_code
