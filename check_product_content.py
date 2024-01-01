@@ -33,6 +33,7 @@ WEBSITES = {
         "name_col_number": 0,
         "desc_col_number": 0,
         "image_col_number": 0,
+        "timeout": 3,
     },
     "hepsiburada": {
         "username": "user",
@@ -41,9 +42,10 @@ WEBSITES = {
         "name_col_number": 0,
         "desc_col_number": 0,
         "image_col_number": 0,
+        "timeout": 10,
     },
 }
-TIMEOUT = 3
+DEFAULT_TIMEOUT = 3
 LOGIN_TIMEOUT = 300
 
 
@@ -92,7 +94,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
 
     browser.get("https://platform.omniens.com/_product/product/list")
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, DEFAULT_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -101,7 +103,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
         )
     ).send_keys(product_code, Keys.ENTER)
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, DEFAULT_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -110,7 +112,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, DEFAULT_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -119,7 +121,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
         )
     ).click()
 
-    WebDriverWait(browser, TIMEOUT).until(
+    WebDriverWait(browser, DEFAULT_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -129,7 +131,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
     ).click()
 
     product_name = (
-        WebDriverWait(browser, TIMEOUT)
+        WebDriverWait(browser, DEFAULT_TIMEOUT)
         .until(
             EC.presence_of_element_located(
                 (
@@ -141,7 +143,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
         .get_attribute("value")
     )
 
-    product_desc = WebDriverWait(browser, TIMEOUT).until(
+    product_desc = WebDriverWait(browser, DEFAULT_TIMEOUT).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -207,7 +209,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
         ):
             browser.get("https://partner.trendyol.com/product-listing/all-products")
 
-        WebDriverWait(browser, TIMEOUT).until(
+        WebDriverWait(browser, DEFAULT_TIMEOUT).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -216,7 +218,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
             )
         ).send_keys(product_code)
 
-        WebDriverWait(browser, TIMEOUT).until(
+        WebDriverWait(browser, DEFAULT_TIMEOUT).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -226,7 +228,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
         ).click()
 
         product_url = (
-            WebDriverWait(browser, TIMEOUT)
+            WebDriverWait(browser, WEBSITES["trendyol"]["timeout"])
             .until(
                 EC.presence_of_element_located(
                     (
@@ -304,7 +306,7 @@ def get_product_url_from_hepsiburada(
         )
 
         product_url = (
-            WebDriverWait(browser, TIMEOUT)
+            WebDriverWait(browser, WEBSITES["hepsiburada"]["timeout"])
             .until(
                 EC.presence_of_element_located(
                     (
