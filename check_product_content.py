@@ -11,11 +11,13 @@ This is an content checker for bathroom products.
 
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-from selenium import webdriver
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from models.web_driver import WebDriver
 
 # ----------------------------
 # COFIGURATIONS
@@ -52,7 +54,7 @@ LOGIN_TIMEOUT = 300
 # ----------------------------
 # FOR OMNIENS
 # ----------------------------
-def login_to_omniens(browser: webdriver, email: str, password: str):
+def login_to_omniens(browser: WebDriver, email: str, password: str):
     "Logins to Trendyol"
 
     browser.get("https://platform.omniens.com/login")
@@ -89,7 +91,7 @@ def login_to_omniens(browser: webdriver, email: str, password: str):
     )
 
 
-def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
+def get_product_info_from_omniens(browser: WebDriver, product_code: str) -> str:
     "Gets the URL of the product with specified code from Trendyol"
 
     browser.get("https://platform.omniens.com/_product/product/list")
@@ -158,7 +160,7 @@ def get_product_info_from_omniens(browser: webdriver, product_code: str) -> str:
 # ----------------------------
 # FOR TRENDYOL
 # ----------------------------
-def login_to_trendyol(browser: webdriver, email: str, password: str):
+def login_to_trendyol(browser: WebDriver, email: str, password: str):
     "Logins to Trendyol"
 
     browser.get("https://partner.trendyol.com/account/login")
@@ -200,7 +202,7 @@ def login_to_trendyol(browser: webdriver, email: str, password: str):
     )
 
 
-def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str | None:
+def get_product_url_from_trendyol(browser: WebDriver, product_code: str) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
     try:
         if (
@@ -245,7 +247,7 @@ def get_product_url_from_trendyol(browser: webdriver, product_code: str) -> str 
         return None
 
 
-def get_product_info_from_trendyol(browser: webdriver, product_url: str) -> (str, str):
+def get_product_info_from_trendyol(browser: WebDriver, product_url: str) -> (str, str):
     "Gets the product name and description on Trendyol"
 
     browser.get(product_url)
@@ -286,7 +288,7 @@ def get_product_info_from_trendyol(browser: webdriver, product_url: str) -> (str
 # ----------------------------
 # FOR HEPSI BURADA
 # ----------------------------
-def login_to_hepsiburada(browser: webdriver, email: str, password: str):
+def login_to_hepsiburada(browser: WebDriver, email: str, password: str):
     "Logins to HepsiBurada"
 
     browser.get("https://merchant.hepsiburada.com/v2/login")
@@ -334,7 +336,7 @@ def login_to_hepsiburada(browser: webdriver, email: str, password: str):
 
 
 def get_product_url_from_hepsiburada(
-    browser: webdriver, product_code: str
+    browser: WebDriver, product_code: str
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsi Burada"
     try:
@@ -362,7 +364,7 @@ def get_product_url_from_hepsiburada(
 
 
 def get_product_info_from_hepsiburada(
-    browser: webdriver, product_url: str
+    browser: WebDriver, product_url: str
 ) -> (str, str):
     "Gets the product name and description on Hepsi Burada"
 
@@ -423,7 +425,7 @@ def main():
     ]
 
     # Create browser
-    active_browser = webdriver.Chrome()
+    active_browser = Chrome()
 
     # Maximize the window
     active_browser.maximize_window()
