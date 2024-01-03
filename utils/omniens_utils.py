@@ -67,7 +67,7 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//span[@class="ng-star-inserted"]',
+                f'//span[@class="ng-star-inserted"][text()="{product_code}"]',
             )
         )
     )
