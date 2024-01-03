@@ -67,6 +67,15 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
+                '//span[@class="ng-star-inserted"]',
+            )
+        )
+    )
+
+    WebDriverWait(browser, timeout).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
                 '//tbody[@role="rowgroup"]//app-checkbox',
             )
         )
