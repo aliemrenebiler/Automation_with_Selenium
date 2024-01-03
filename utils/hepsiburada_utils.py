@@ -59,7 +59,7 @@ def login_to_hepsiburada(
 
 
 def get_product_url_from_hepsiburada(
-    browser: WebDriver, product_code: str, timeout: int = 10
+    browser: WebDriver, product_code: str, timeout: int = 8
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsi Burada"
     try:
@@ -67,6 +67,19 @@ def get_product_url_from_hepsiburada(
             "https://merchant.hepsiburada.com/v2/listings?"
             + f"tab=onSale&page=1&pageSize=10&search={product_code}"
         )
+
+        try:
+            WebDriverWait(browser, timeout).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@class="no-data-placeholder"]',
+                    )
+                )
+            )
+            return None
+        except Exception:
+            ...
 
         product_url = (
             WebDriverWait(browser, timeout)
