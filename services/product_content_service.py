@@ -25,7 +25,7 @@ class ProductContentService:
         product_urls = []
 
         # Get URLs
-        for product_code in enumerate(product_codes):
+        for product_code in product_codes:
             # Get product URL
             product_url = get_product_url_from_trendyol(browser, product_code)
 
@@ -53,7 +53,7 @@ class ProductContentService:
         product_urls = []
 
         # Get URLs
-        for product_code in enumerate(product_codes):
+        for product_code in product_codes:
             # Get product URL
             product_url = get_product_url_from_hepsiburada(browser, product_code)
 
