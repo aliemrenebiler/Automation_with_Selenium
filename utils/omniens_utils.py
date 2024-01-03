@@ -94,7 +94,7 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//li[@role="menuitem"]/a[text()=Düzenle]',
+                '//li[@role="menuitem"]/a[text()="Düzenle"]',
             )
         )
     ).click()
