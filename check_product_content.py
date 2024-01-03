@@ -9,17 +9,14 @@ This is an content checker for bathroom products.
 # pylint: disable=broad-except
 # pylint: disable=broad-exception-raised
 
-from openpyxl import load_workbook
-from openpyxl.utils import get_column_letter
 from selenium.webdriver import Chrome
-
-from utils.hepsiburada_utils import (
-    get_product_url_from_hepsiburada,
-    login_to_hepsiburada,
-)
-from utils.trendyol_utils import (
-    get_product_url_from_trendyol,
-    login_to_trendyol,
+from services.product_content_service import ProductContentService
+from utils.excel_utils import (
+    add_data_to_excel_sheet_column,
+    close_workbook,
+    get_column_data_from_excel_sheet,
+    open_workbook,
+    save_workbook,
 )
 
 # ----------------------------
@@ -27,7 +24,8 @@ from utils.trendyol_utils import (
 # ----------------------------
 EXCEL_FILE_PATH = "/path/to/file.xlsx"
 SHEET_NAME = "sheet_name"
-PRODUCTS_START_ROW_NUMBER = 0
+PRODUCTS_ROW_NUMBER_START = 0
+PRODUCTS_ROW_NUMBER_END = 0
 PRODUCT_CODES_COL_NUMBER = 0
 PRODUCT_NAMES_COL_NUMBER = 0
 WEBSITES = {
@@ -56,102 +54,59 @@ WEBSITES = {
 def main():
     "Main code"
 
-    # Open excel file
-    workbook = load_workbook(EXCEL_FILE_PATH)
-    try:
-        sheet = workbook[SHEET_NAME]
-    except Exception:
-        sheet = workbook.active
+    product_content_service = ProductContentService()
 
-    # Get product codes
-    product_codes = [
-        cell.value
-        for cell in sheet[get_column_letter(PRODUCT_CODES_COL_NUMBER)][
-            PRODUCTS_START_ROW_NUMBER - 1 :
-        ]
-    ]
+    workbook = open_workbook(EXCEL_FILE_PATH)
+    sheet = workbook[SHEET_NAME]
 
-    # Create browser
-    active_browser = Chrome()
+    product_codes = get_column_data_from_excel_sheet(
+        sheet,
+        PRODUCT_CODES_COL_NUMBER,
+        PRODUCTS_ROW_NUMBER_START,
+        PRODUCTS_ROW_NUMBER_END,
+    )
 
-    # Maximize the window
-    active_browser.maximize_window()
+    browser = Chrome()
+    browser.maximize_window()
 
     try:
-        # Login to Trendyol
-        login_to_trendyol(
-            active_browser,
+        trendyol_product_urls = product_content_service.get_product_urls_from_trendyol(
+            browser,
             WEBSITES["trendyol"]["username"],
             WEBSITES["trendyol"]["password"],
+            product_codes,
         )
 
-        # Get URLs
-        for product_index, product_code in enumerate(product_codes):
-            try:
-                # Get Trendyol product URL
-                product_url = get_product_url_from_trendyol(
-                    active_browser, product_code
-                )
+        add_data_to_excel_sheet_column(
+            sheet,
+            WEBSITES["trendyol"]["url_col_number"],
+            PRODUCTS_ROW_NUMBER_START,
+            trendyol_product_urls,
+        )
+        save_workbook(workbook, EXCEL_FILE_PATH)
 
-                # Raise exception if product URL was not found
-                if not product_url:
-                    raise Exception(
-                        f"Could not found product on Trendyol: {product_code}"
-                    )
-
-                # Add product URL to excel
-                sheet[
-                    get_column_letter(
-                        WEBSITES["trendyol"]["url_col_number"],
-                    )
-                    + str(product_index + PRODUCTS_START_ROW_NUMBER)
-                ] = product_url
-            except Exception as error:
-                print(str(error))
-
-        # Save excel file
-        workbook.save(EXCEL_FILE_PATH)
-
-        # Login to Hepsi Burada
-        login_to_hepsiburada(
-            active_browser,
-            WEBSITES["hepsiburada"]["username"],
-            WEBSITES["hepsiburada"]["password"],
+        hepsiburada_product_urls = (
+            product_content_service.get_product_urls_from_hepsiburada(
+                browser,
+                WEBSITES["hepsiburada"]["username"],
+                WEBSITES["hepsiburada"]["password"],
+                product_codes,
+            )
         )
 
-        # Get URLs
-        for product_index, product_code in enumerate(product_codes):
-            try:
-                # Get Hepsi Burada product URL
-                product_url = get_product_url_from_hepsiburada(
-                    active_browser, product_code
-                )
-
-                # Raise exception if product URL was not found
-                if not product_url:
-                    raise Exception(
-                        f"Could not found product on Hepsi Burada: {product_code}"
-                    )
-
-                # Add product URL to excel
-                sheet[
-                    get_column_letter(
-                        WEBSITES["hepsiburada"]["url_col_number"],
-                    )
-                    + str(product_index + PRODUCTS_START_ROW_NUMBER)
-                ] = product_url
-            except Exception as error:
-                print(str(error))
-
-        # Save excel file
-        workbook.save(EXCEL_FILE_PATH)
+        add_data_to_excel_sheet_column(
+            sheet,
+            WEBSITES["hepsiburada"]["url_col_number"],
+            PRODUCTS_ROW_NUMBER_START,
+            hepsiburada_product_urls,
+        )
+        save_workbook(workbook, EXCEL_FILE_PATH)
 
     except Exception:
         print("An unexpected error occured.")
 
-    # Close excel and browser
-    workbook.close()
-    active_browser.close()
+    close_workbook(workbook)
+    browser.close()
 
     print("Completed.")
 
