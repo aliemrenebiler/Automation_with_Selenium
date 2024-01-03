@@ -58,7 +58,7 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//input[@id="mat-input-54"]',
+                '//input[@placeholder="anahtar kelime aratın"]',
             )
         )
     ).send_keys(product_code, Keys.ENTER)
@@ -67,7 +67,7 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//mat-checkbox[@id="mat-checkbox-2"]',
+                '//tbody[@role="rowgroup"]//app-checkbox',
             )
         )
     ).click()
