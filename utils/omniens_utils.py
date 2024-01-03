@@ -94,7 +94,7 @@ def get_product_info_from_omniens(
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//li[@class="menuitem"]/a[text()=Düzenle]',
+                '//li[@role="menuitem"]/a[text()=Düzenle]',
             )
         )
     ).click()
@@ -112,13 +112,17 @@ def get_product_info_from_omniens(
         .get_attribute("value")
     )
 
-    product_desc = WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//div[@class="angular-editor-textarea"]',
+    product_desc = (
+        WebDriverWait(browser, timeout)
+        .until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@class="angular-editor-textarea"]/text()',
+                )
             )
         )
+        .find_element(By.XPATH, "*")
     )
 
     return product_name, product_desc
