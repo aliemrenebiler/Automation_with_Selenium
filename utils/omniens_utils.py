@@ -28,7 +28,7 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
         EC.presence_of_element_located(
             (
                 By.XPATH,
-                '//input[@name="password"]',
+                '//input[@name="pass"]',
             )
         )
     ).send_keys(password)
