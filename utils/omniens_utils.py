@@ -49,7 +49,7 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
 
 def get_product_info_from_omniens(
     browser: WebDriver, product_code: str, timeout: int = 10
-) -> str:
+) -> (str, str):
     "Gets the URL of the product with specified code from Trendyol"
 
     browser.get("https://platform.omniens.com/_product/product/list")
