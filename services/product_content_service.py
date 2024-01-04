@@ -13,6 +13,8 @@ from utils.hepsiburada_utils import (
 )
 from utils.trendyol_utils import get_product_url_from_trendyol, login_to_trendyol
 
+# pylint: disable=too-many-arguments
+
 
 class ProductContentService:
     "Product Content Service Class"
