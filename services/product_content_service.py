@@ -44,8 +44,6 @@ class ProductContentService:
                 sheet[f"{get_column_letter(col_number)}{row_number_start + i}"] = ""
                 print(f"{i} - {product_code} - Could not found product on Trendyol")
             workbook.save(excel_file_path)
-
-        browser.close()
         workbook.close()
 
         return product_urls
@@ -80,8 +78,6 @@ class ProductContentService:
                 sheet[f"{get_column_letter(col_number)}{row_number_start + i}"] = ""
                 print(f"{i} - {product_code} - Could not found product on Hepsiburada")
             workbook.save(excel_file_path)
-
-        browser.close()
         workbook.close()
 
         return product_urls
