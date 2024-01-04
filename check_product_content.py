@@ -12,7 +12,6 @@ This is an content checker for bathroom products.
 from selenium.webdriver import Chrome
 from services.product_content_service import ProductContentService
 from utils.excel_utils import (
-    add_data_to_excel_sheet_column,
     get_column_data_from_excel_sheet,
     open_workbook,
 )
@@ -68,37 +67,31 @@ def main():
     browser.maximize_window()
 
     try:
-        trendyol_product_urls = product_content_service.get_product_urls_from_trendyol(
-            browser,
-            WEBSITES["trendyol"]["username"],
-            WEBSITES["trendyol"]["password"],
-            product_codes,
+        trendyol_product_urls = (
+            product_content_service.save_trendyol_product_urls_to_excel(
+                browser,
+                WEBSITES["trendyol"]["username"],
+                WEBSITES["trendyol"]["password"],
+                product_codes,
+                EXCEL_FILE_PATH,
+                SHEET_NAME,
+                WEBSITES["trendyol"]["url_col_number"],
+                PRODUCTS_ROW_NUMBER_START,
+            )
         )
-
-        add_data_to_excel_sheet_column(
-            sheet,
-            WEBSITES["trendyol"]["url_col_number"],
-            PRODUCTS_ROW_NUMBER_START,
-            trendyol_product_urls,
-        )
-        workbook.save(EXCEL_FILE_PATH)
 
         hepsiburada_product_urls = (
-            product_content_service.get_product_urls_from_hepsiburada(
+            product_content_service.save_hepsiburada_product_urls_to_excel(
                 browser,
                 WEBSITES["hepsiburada"]["username"],
                 WEBSITES["hepsiburada"]["password"],
                 product_codes,
+                EXCEL_FILE_PATH,
+                SHEET_NAME,
+                WEBSITES["hepsiburada"]["url_col_number"],
+                PRODUCTS_ROW_NUMBER_START,
             )
         )
-
-        add_data_to_excel_sheet_column(
-            sheet,
-            WEBSITES["hepsiburada"]["url_col_number"],
-            PRODUCTS_ROW_NUMBER_START,
-            hepsiburada_product_urls,
-        )
-        workbook.save(EXCEL_FILE_PATH)
 
     except Exception:
         print("An unexpected error occured.")
