@@ -122,7 +122,7 @@ def get_product_info_from_omniens(
                 )
             )
         )
-        .find_element(By.XPATH, "*")
+        .find_elements(By.XPATH, "*")
     )
 
     product_desc = "".join(
