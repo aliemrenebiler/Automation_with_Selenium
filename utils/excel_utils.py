@@ -1,6 +1,6 @@
 "Excel Utils"
 
-from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -11,18 +11,6 @@ def open_workbook(excel_file_path):
     "Opens the workbook and returns the object"
 
     return load_workbook(excel_file_path)
-
-
-def close_workbook(workbook: Workbook):
-    "Closes the workbook"
-
-    workbook.close()
-
-
-def save_workbook(workbook: Workbook, excel_file_path: str):
-    "Saves the workbook"
-
-    workbook.save(excel_file_path)
 
 
 def get_column_data_from_excel_sheet(

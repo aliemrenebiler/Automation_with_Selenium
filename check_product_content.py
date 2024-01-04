@@ -13,10 +13,8 @@ from selenium.webdriver import Chrome
 from services.product_content_service import ProductContentService
 from utils.excel_utils import (
     add_data_to_excel_sheet_column,
-    close_workbook,
     get_column_data_from_excel_sheet,
     open_workbook,
-    save_workbook,
 )
 
 # ----------------------------
@@ -83,7 +81,7 @@ def main():
             PRODUCTS_ROW_NUMBER_START,
             trendyol_product_urls,
         )
-        save_workbook(workbook, EXCEL_FILE_PATH)
+        workbook.save(EXCEL_FILE_PATH)
 
         hepsiburada_product_urls = (
             product_content_service.get_product_urls_from_hepsiburada(
@@ -100,12 +98,12 @@ def main():
             PRODUCTS_ROW_NUMBER_START,
             hepsiburada_product_urls,
         )
-        save_workbook(workbook, EXCEL_FILE_PATH)
+        workbook.save(EXCEL_FILE_PATH)
 
     except Exception:
         print("An unexpected error occured.")
 
-    close_workbook(workbook)
+    workbook.close()
     browser.close()
 
     print("Completed.")
