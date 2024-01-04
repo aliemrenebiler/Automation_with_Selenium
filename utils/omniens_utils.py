@@ -105,24 +105,28 @@ def get_product_info_from_omniens(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    '//input[@id="mat-input-9"]',
+                    '//input[@placeholder="Ürün Adı"]',
                 )
             )
         )
         .get_attribute("value")
     )
 
-    product_desc = (
+    product_desc_child_elements = (
         WebDriverWait(browser, timeout)
         .until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    '//div[@class="angular-editor-textarea"]/text()',
+                    '//div[@class="angular-editor-textarea"]',
                 )
             )
         )
         .find_element(By.XPATH, "*")
+    )
+
+    product_desc = "".join(
+        [child.get_attribute("outerHTML") for child in product_desc_child_elements]
     )
 
     return product_name, product_desc
