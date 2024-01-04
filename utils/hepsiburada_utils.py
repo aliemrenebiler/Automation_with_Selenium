@@ -12,7 +12,7 @@ from models.web_driver import WebDriver
 def login_to_hepsiburada(
     browser: WebDriver, email: str, password: str, timeout: int = 300
 ):
-    "Logins to HepsiBurada"
+    "Logins to Hepsiburada"
 
     browser.get("https://merchant.hepsiburada.com/v2/login")
 
@@ -61,7 +61,7 @@ def login_to_hepsiburada(
 def get_product_url_from_hepsiburada(
     browser: WebDriver, product_code: str, timeout: int = 8
 ) -> str | None:
-    "Gets the URL of the product with specified code from Hepsi Burada"
+    "Gets the URL of the product with specified code from Hepsiburada"
     try:
         browser.get(
             "https://merchant.hepsiburada.com/v2/listings?"
@@ -102,7 +102,7 @@ def get_product_url_from_hepsiburada(
 def get_product_info_from_hepsiburada(
     browser: WebDriver, product_url: str, timeout: int = 10
 ) -> (str, str):
-    "Gets the product name and description on Hepsi Burada"
+    "Gets the product name and description on Hepsiburada"
 
     browser.get(product_url)
 
