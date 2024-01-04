@@ -1,10 +1,10 @@
-"Excel Sheet Cell Model"
+"Excel Cells Model"
 
 # pylint: disable=too-few-public-methods
 
 
-class ExcelSheetCell:
-    "Excel Sheet Cell Model Class"
+class ExcelCells:
+    "Excel Cells Model Class"
 
     row_start: int
     column_start: int
