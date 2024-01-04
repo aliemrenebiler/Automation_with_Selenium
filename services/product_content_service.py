@@ -1,5 +1,7 @@
 "Product Content Service"
 
+from models.web_driver import WebDriver
+
 from utils.hepsiburada_utils import (
     get_product_url_from_hepsiburada,
     login_to_hepsiburada,
@@ -11,7 +13,7 @@ class ProductContentService:
     "Product Content Service Class"
 
     def get_product_urls_from_trendyol(
-        self, browser, username: str, password: str, product_codes: [str]
+        self, browser: WebDriver, username: str, password: str, product_codes: [str]
     ):
         "Gets the product URLs from Trendyol and saves them to excel file"
 
@@ -39,7 +41,7 @@ class ProductContentService:
         return product_urls
 
     def get_product_urls_from_hepsiburada(
-        self, browser, username: str, password: str, product_codes: [str]
+        self, browser: WebDriver, username: str, password: str, product_codes: [str]
     ):
         "Gets the product URLs from Hepsi Burada and saves them to excel file"
 
