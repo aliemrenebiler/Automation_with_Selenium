@@ -1,10 +1,9 @@
 "Excel File Model"
 
-# pylint: disable=too-few-public-methods
-
-
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
+
+# pylint: disable=too-few-public-methods
 
 
 class ExcelFile:
