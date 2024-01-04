@@ -10,6 +10,9 @@ This is an content checker for bathroom products.
 # pylint: disable=broad-exception-raised
 
 from selenium.webdriver import Chrome
+from models.account_credentials import AccountCredentials
+from models.excel_cells import ExcelCells
+from models.excel_file import ExcelFile
 from services.product_content_service import ProductContentService
 from utils.excel_utils import (
     get_column_data_from_excel_sheet,
@@ -44,10 +47,38 @@ WEBSITES = {
     },
 }
 
+excel_file = ExcelFile(
+    file_path=EXCEL_FILE_PATH,
+    sheet_name=SHEET_NAME,
+)
 
-# ----------------------------
-# MAIN
-# ----------------------------
+product_code_cells = ExcelCells(
+    column_start=PRODUCT_CODES_COL_NUMBER,
+    row_start=PRODUCTS_ROW_NUMBER_START,
+    row_end=PRODUCTS_ROW_NUMBER_END,
+)
+
+trendyol_credentials = AccountCredentials(
+    username=WEBSITES["trendyol"]["username"],
+    password=WEBSITES["trendyol"]["password"],
+)
+
+trendyol_product_url_cells = ExcelCells(
+    column_start=WEBSITES["trendyol"]["url_col_number"],
+    row_start=PRODUCTS_ROW_NUMBER_START,
+)
+
+hepsiburada_credentials = AccountCredentials(
+    username=WEBSITES["hepsiburada"]["username"],
+    password=WEBSITES["hepsiburada"]["password"],
+)
+
+hepsiburada_product_url_cells = ExcelCells(
+    column_start=WEBSITES["hepsiburada"]["url_col_number"],
+    row_start=PRODUCTS_ROW_NUMBER_START,
+)
+
+
 def main():
     "Main code"
 
@@ -58,9 +89,9 @@ def main():
 
     product_codes = get_column_data_from_excel_sheet(
         sheet,
-        PRODUCT_CODES_COL_NUMBER,
-        PRODUCTS_ROW_NUMBER_START,
-        PRODUCTS_ROW_NUMBER_END,
+        product_code_cells.column_start,
+        product_code_cells.row_start,
+        product_code_cells.row_end,
     )
 
     browser = Chrome()
@@ -70,26 +101,20 @@ def main():
         trendyol_product_urls = (
             product_content_service.save_trendyol_product_urls_to_excel(
                 browser,
-                WEBSITES["trendyol"]["username"],
-                WEBSITES["trendyol"]["password"],
+                trendyol_credentials,
+                excel_file,
+                trendyol_product_url_cells,
                 product_codes,
-                EXCEL_FILE_PATH,
-                SHEET_NAME,
-                WEBSITES["trendyol"]["url_col_number"],
-                PRODUCTS_ROW_NUMBER_START,
             )
         )
 
         hepsiburada_product_urls = (
             product_content_service.save_hepsiburada_product_urls_to_excel(
                 browser,
-                WEBSITES["hepsiburada"]["username"],
-                WEBSITES["hepsiburada"]["password"],
+                hepsiburada_credentials,
+                excel_file,
+                hepsiburada_product_url_cells,
                 product_codes,
-                EXCEL_FILE_PATH,
-                SHEET_NAME,
-                WEBSITES["hepsiburada"]["url_col_number"],
-                PRODUCTS_ROW_NUMBER_START,
             )
         )
 
