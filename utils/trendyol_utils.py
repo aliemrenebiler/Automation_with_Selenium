@@ -102,7 +102,7 @@ def get_product_url_from_trendyol(
 
 def get_product_info_from_trendyol(
     browser: WebDriver, product_url: str, timeout: int = 3
-) -> (str, str):
+) -> (str, str | None):
     "Gets the product name and description on Trendyol"
 
     browser.get(product_url)
@@ -120,21 +120,24 @@ def get_product_info_from_trendyol(
         .text
     )
 
-    product_desc_child_elements = (
-        WebDriverWait(browser, timeout)
-        .until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//div[@id="rich-content-wrapper"]',
+    try:
+        product_desc_child_elements = (
+            WebDriverWait(browser, timeout)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@id="rich-content-wrapper"]',
+                    )
                 )
             )
+            .find_elements(By.XPATH, "*")
         )
-        .find_elements(By.XPATH, "*")
-    )
 
-    product_desc = "".join(
-        [child.get_attribute("outerHTML") for child in product_desc_child_elements]
-    )
+        product_desc = "".join(
+            [child.get_attribute("outerHTML") for child in product_desc_child_elements]
+        )
+    except Exception:
+        product_desc = None
 
     return product_name, product_desc
