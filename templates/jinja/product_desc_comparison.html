@@ -3,6 +3,7 @@
 <head>
     <style>
         .table {
+            table-layout: fixed;
             border-collapse: collapse;
             width: 100%;
             font-family: Arial, sans-serif;
@@ -35,13 +36,19 @@
         </tr>
         <tr>
             <td class="table-cell">
+                {%- if product["omniens_desc"] -%}
                 {{ product["omniens_desc"] }}
+                {%- endif -%}
             </td>
             <td class="table-cell">
+                {%- if product["trendyol_desc"] -%}
                 {{ product["trendyol_desc"] }}
+                {%- endif -%}
             </td>
             <td class="table-cell">
+                {%- if product["hepsiburada_desc"] -%}
                 {{ product["hepsiburada_desc"] }}
+                {%- endif -%}
             </td>
         </tr>
     </table>
