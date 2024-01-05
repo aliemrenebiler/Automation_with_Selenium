@@ -35,12 +35,12 @@ class ProductContentService:
         excel_file: ExcelFile,
         product_cells: ExcelCells,
         product_codes: [str],
-    ) -> [str]:
+    ) -> dict:
         "Gets the product URLs from Trendyol and saves them to excel file"
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-        product_urls = []
+        product_urls = {}
 
         login_to_trendyol(
             browser,
@@ -49,7 +49,7 @@ class ProductContentService:
         )
         for i, product_code in enumerate(product_codes):
             product_url = get_product_url_from_trendyol(browser, product_code)
-            product_urls.append(product_url)
+            product_urls[product_code] = product_url
             if product_url:
                 excel_file.sheet[
                     f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
@@ -72,12 +72,12 @@ class ProductContentService:
         excel_file: ExcelFile,
         product_cells: ExcelCells,
         product_codes: [str],
-    ) -> [str]:
+    ) -> dict:
         "Gets the product URLs from Hepsiburada and saves them to excel file"
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-        product_urls = []
+        product_urls = {}
 
         login_to_hepsiburada(
             browser,
@@ -86,7 +86,7 @@ class ProductContentService:
         )
         for i, product_code in enumerate(product_codes):
             product_url = get_product_url_from_hepsiburada(browser, product_code)
-            product_urls.append(product_url)
+            product_urls[product_code] = product_url
             if product_url:
                 excel_file.sheet[
                     f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
