@@ -1,4 +1,8 @@
 **/__pycache__
 **/tempCodeRunnerFile.py
-**/venv
 **/.DS_Store
+
+venv
+temp/*
+
+!**/.gitkeep
