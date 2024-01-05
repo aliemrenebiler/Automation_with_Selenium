@@ -1,17 +1,26 @@
 "Product Content Service"
 
+import os
 from openpyxl.utils import get_column_letter
 from models.account_credentials import AccountCredentials
 from models.excel_cells import ExcelCells
 from models.excel_file import ExcelFile
 from models.web_driver import WebDriver
 from utils.excel_utils import open_workbook
+from utils.file_utils import save_file
 
 from utils.hepsiburada_utils import (
+    get_product_info_from_hepsiburada,
     get_product_url_from_hepsiburada,
     login_to_hepsiburada,
 )
-from utils.trendyol_utils import get_product_url_from_trendyol, login_to_trendyol
+from utils.jinja_utils import create_html_from_jinja_template
+from utils.omniens_utils import get_product_info_from_omniens, login_to_omniens
+from utils.trendyol_utils import (
+    get_product_info_from_trendyol,
+    get_product_url_from_trendyol,
+    login_to_trendyol,
+)
 
 # pylint: disable=too-many-arguments
 
@@ -92,3 +101,85 @@ class ProductContentService:
         excel_file.workbook.close()
 
         return product_urls
+
+    def compare_product_info(
+        self,
+        browser: WebDriver,
+        omniens_credentials: AccountCredentials,
+        excel_file: ExcelFile,
+        trendyol_product_cells: ExcelCells,
+        hepsiburada_product_cells: ExcelCells,
+        product_codes: [str],
+        trendyol_urls: dict,
+        hepsiburada_urls: dict,
+    ):
+        "Compares the Trendyol and Hepsiburada product informations with Omniens"
+
+        excel_file.workbook = open_workbook(excel_file.file_path)
+        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
+        products_with_all_desc = []
+
+        login_to_omniens(
+            browser,
+            omniens_credentials.username,
+            omniens_credentials.password,
+        )
+        for i, product_code in enumerate(product_codes):
+            trendyol_product_name, trendyol_product_desc = None, None
+            hepsiburada_product_name, hepsiburada_product_desc = None, None
+            omniens_product_name, omniens_product_desc = get_product_info_from_omniens(
+                browser, product_code
+            )
+            if product_code in trendyol_urls.keys():
+                (
+                    trendyol_product_name,
+                    trendyol_product_desc,
+                ) = get_product_info_from_trendyol(
+                    browser,
+                    trendyol_urls[product_code],
+                )
+                excel_file.sheet[
+                    get_column_letter(trendyol_product_cells.column_start)
+                    + f"{trendyol_product_cells.row_start + i}"
+                ] = (
+                    "DOĞRU"
+                    if trendyol_product_name == omniens_product_name
+                    else "YANLIŞ"
+                )
+                excel_file.workbook.save(excel_file.file_path)
+            if product_code in hepsiburada_urls.keys():
+                (
+                    hepsiburada_product_name,
+                    hepsiburada_product_desc,
+                ) = get_product_info_from_hepsiburada(
+                    browser,
+                    hepsiburada_urls[product_code],
+                )
+                excel_file.sheet[
+                    get_column_letter(hepsiburada_product_cells.column_start)
+                    + f"{hepsiburada_product_cells.row_start + i}"
+                ] = (
+                    "DOĞRU"
+                    if hepsiburada_product_name == omniens_product_name
+                    else "YANLIŞ"
+                )
+                excel_file.workbook.save(excel_file.file_path)
+            if trendyol_product_desc or hepsiburada_product_desc:
+                products_with_all_desc.append(
+                    {
+                        "code": product_code,
+                        "omniens_desc": omniens_product_desc,
+                        "trendyol_desc": trendyol_product_desc,
+                        "hepsiburada_desc": hepsiburada_product_desc,
+                    }
+                )
+                comparison_html = create_html_from_jinja_template(
+                    os.path.join("templates", "jinja"),
+                    os.path.join("product_desc_comparison.html"),
+                    products_with_all_desc,
+                )
+                save_file(
+                    comparison_html,
+                    os.path.join("temp", "product_description_comparison.html"),
+                )
+        excel_file.workbook.close()
