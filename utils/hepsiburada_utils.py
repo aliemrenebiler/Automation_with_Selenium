@@ -87,7 +87,7 @@ def get_product_url_from_hepsiburada(
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        '//div[@class="card-text two-line"]//a',
+                        '//div[contains(@class, "card-text")]//a',
                     )
                 )
             )
