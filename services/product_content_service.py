@@ -176,7 +176,7 @@ class ProductContentService:
                 comparison_html = create_html_from_jinja_template(
                     os.path.join("templates", "jinja"),
                     os.path.join("product_desc_comparison.html"),
-                    products_with_all_desc,
+                    {"products": products_with_all_desc},
                 )
                 save_file(
                     comparison_html,
