@@ -49,7 +49,7 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
 
 def get_product_info_from_omniens(
     browser: WebDriver, product_code: str, timeout: int = 10
-) -> (str, str):
+) -> (str, str | None):
     "Gets the URL of the product with specified code from Trendyol"
 
     browser.get("https://platform.omniens.com/_product/product/list")
@@ -112,21 +112,24 @@ def get_product_info_from_omniens(
         .get_attribute("value")
     )
 
-    product_desc_child_elements = (
-        WebDriverWait(browser, timeout)
-        .until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//div[@class="angular-editor-textarea"]',
+    try:
+        product_desc_child_elements = (
+            WebDriverWait(browser, timeout)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@class="angular-editor-textarea"]',
+                    )
                 )
             )
+            .find_elements(By.XPATH, "*")
         )
-        .find_elements(By.XPATH, "*")
-    )
 
-    product_desc = "".join(
-        [child.get_attribute("outerHTML") for child in product_desc_child_elements]
-    )
+        product_desc = "".join(
+            [child.get_attribute("outerHTML") for child in product_desc_child_elements]
+        )
+    except Exception:
+        product_desc = None
 
     return product_name, product_desc
