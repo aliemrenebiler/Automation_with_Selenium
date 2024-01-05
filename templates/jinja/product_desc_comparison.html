@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <style>
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .table-title {
+            border: 1px solid #ccc;
+            background-color: #f2f2f2;
+            padding: 5px;
+        }
+
+        .table-cell {
+            border: 1px solid #231313;
+            padding: 5px;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    {%- for product in products -%}
+    <center>
+        <h3>{{ product["code"] }}</h3>
+    </center>
+    <table class="table">
+        <tr>
+            <th class="table-title">Omniens</th>
+            <th class="table-title">Trendyol</th>
+            <th class="table-title">Hepsiburada</th>
+        </tr>
+        <tr>
+            <td class="table-cell">
+                {{ product["omniens_desc"] }}
+            </td>
+            <td class="table-cell">
+                {{ product["trendyol_desc"] }}
+            </td>
+            <td class="table-cell">
+                {{ product["hepsiburada_desc"] }}
+            </td>
+        </tr>
+    </table>
+    {%- endfor -%}
+</body>
+
+</html>
