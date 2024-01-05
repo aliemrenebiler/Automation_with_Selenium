@@ -58,6 +58,21 @@ def login_to_hepsiburada(
     )
 
 
+def handle_hepsiburada_cookie(browser: WebDriver, timeout: int = 10):
+    "Handles Hepsiburada cookie popup"
+
+    browser.get("https://www.hepsiburada.com/")
+
+    WebDriverWait(browser, timeout).until(
+        EC.presence_of_element_located(
+            (
+                By.XPATH,
+                '//button[@id="onetrust-accept-btn-handler"]',
+            )
+        )
+    ).click()
+
+
 def get_product_url_from_hepsiburada(
     browser: WebDriver, product_code: str, timeout: int = 8
 ) -> str | None:

@@ -12,6 +12,7 @@ from utils.file_utils import save_file
 from utils.hepsiburada_utils import (
     get_product_info_from_hepsiburada,
     get_product_url_from_hepsiburada,
+    handle_hepsiburada_cookie,
     login_to_hepsiburada,
 )
 from utils.jinja_utils import create_html_from_jinja_template
@@ -119,6 +120,7 @@ class ProductContentService:
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
         products_with_all_desc = []
 
+        handle_hepsiburada_cookie(browser)
         login_to_omniens(
             browser,
             omniens_credentials.username,
