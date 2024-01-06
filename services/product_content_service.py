@@ -51,6 +51,39 @@ class ProductContentService:
 
         return [str(code) for code in product_codes]
 
+    def get_product_urls_from_excel(
+        self,
+        excel_file: ExcelFile,
+        product_code_cells: ExcelCells,
+        product_url_column: int,
+    ) -> dict:
+        "Gets all product URLs from specified column and in excel sheet"
+
+        excel_file.workbook = open_workbook(excel_file.file_path)
+        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
+
+        product_codes = get_column_data_from_excel_sheet(
+            excel_file.sheet,
+            product_code_cells.column_start,
+            product_code_cells.row_start,
+            product_code_cells.row_end,
+        )
+
+        product_urls = get_column_data_from_excel_sheet(
+            excel_file.sheet,
+            product_url_column,
+            product_code_cells.row_start,
+            product_code_cells.row_end,
+        )
+
+        excel_file.workbook.close()
+
+        return {
+            str(code): product_urls[i]
+            for i, code in enumerate(product_codes)
+            if product_urls[i]
+        }
+
     def save_trendyol_product_urls_to_excel(
         self,
         browser: WebDriver,
