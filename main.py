@@ -7,7 +7,6 @@ def main():
     "Main Function"
 
     pc_workflows = ProductContentWorkflows()
-
     pc_workflows.compare_product_information()
 
 
