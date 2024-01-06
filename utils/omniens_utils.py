@@ -1,5 +1,6 @@
 "Omniens Utils"
 
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -63,7 +64,7 @@ def get_product_info_from_omniens(
         )
     ).send_keys(product_code, Keys.ENTER)
 
-    WebDriverWait(browser, timeout).until(
+    product_element = WebDriverWait(browser, timeout).until(
         EC.presence_of_element_located(
             (
                 By.XPATH,
@@ -71,33 +72,8 @@ def get_product_info_from_omniens(
             )
         )
     )
-
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//tbody[@role="rowgroup"]//app-checkbox',
-            )
-        )
-    ).click()
-
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//app-split-button[@class="ng-star-inserted"]',
-            )
-        )
-    ).click()
-
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//li[@role="menuitem"]/a[text()="Düzenle"]',
-            )
-        )
-    ).click()
+    action = ActionChains(browser)
+    action.double_click(product_element).perform()
 
     product_name = (
         WebDriverWait(browser, timeout)
