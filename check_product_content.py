@@ -9,7 +9,7 @@ This is an content checker for bathroom products.
 # pylint: disable=broad-except
 # pylint: disable=broad-exception-raised
 
-from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome, ChromeOptions
 from models.account_credentials import AccountCredentials
 from models.excel_cells import ExcelCells
 from models.excel_file import ExcelFile
@@ -131,7 +131,10 @@ def main():
         product_code_cells,
     )
 
-    browser = Chrome()
+    options = ChromeOptions()
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--ignore-ssl-errors")
+    browser = Chrome(options=options)
     browser.maximize_window()
 
     try:
