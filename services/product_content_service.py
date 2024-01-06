@@ -55,7 +55,7 @@ class ProductContentService:
         browser: WebDriver,
         trendyol_credentials: AccountCredentials,
         excel_file: ExcelFile,
-        product_cells: ExcelCells,
+        trendyol_product_url_cells: ExcelCells,
         product_codes: [str],
     ) -> dict:
         "Gets the product URLs from Trendyol and saves them to excel file"
@@ -72,16 +72,14 @@ class ProductContentService:
         for i, product_code in enumerate(product_codes):
             product_url = get_product_url_from_trendyol(browser, product_code)
             product_urls[product_code] = product_url
+            cell_column = get_column_letter(trendyol_product_url_cells.column_start)
+            cell_row = trendyol_product_url_cells.row_start + i
             if product_url:
-                excel_file.sheet[
-                    f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
-                ] = product_url
-                print(f"{i} - {product_code} - Trendyol URL: {product_url}")
+                excel_file.sheet[f"{cell_column}{cell_row}"] = product_url
+                print(f"{cell_row} - {product_code} - Trendyol URL: {product_url}")
             else:
-                excel_file.sheet[
-                    f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
-                ] = ""
-                print(f"{i} - {product_code} - Could not found product on Trendyol")
+                excel_file.sheet[f"{cell_column}{cell_row}"] = ""
+                print(f"{cell_row} - {product_code} - Not Found On Trendyol")
             excel_file.workbook.save(excel_file.file_path)
         excel_file.workbook.close()
 
@@ -92,7 +90,7 @@ class ProductContentService:
         browser: WebDriver,
         hepsiburada_credentials: AccountCredentials,
         excel_file: ExcelFile,
-        product_cells: ExcelCells,
+        hepsiburada_product_url_cells: ExcelCells,
         product_codes: [str],
     ) -> dict:
         "Gets the product URLs from Hepsiburada and saves them to excel file"
@@ -109,16 +107,14 @@ class ProductContentService:
         for i, product_code in enumerate(product_codes):
             product_url = get_product_url_from_hepsiburada(browser, product_code)
             product_urls[product_code] = product_url
+            cell_column = get_column_letter(hepsiburada_product_url_cells.column_start)
+            cell_row = hepsiburada_product_url_cells.row_start + i
             if product_url:
-                excel_file.sheet[
-                    f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
-                ] = product_url
-                print(f"{i} - {product_code} - Hepsiburada URL: {product_url}")
+                excel_file.sheet[f"{cell_column}{cell_row}"] = product_url
+                print(f"{cell_row} - {product_code} - Hepsiburada URL: {product_url}")
             else:
-                excel_file.sheet[
-                    f"{get_column_letter(product_cells.column_start)}{product_cells.row_start + i}"
-                ] = ""
-                print(f"{i} - {product_code} - Could not found product on Hepsiburada")
+                excel_file.sheet[f"{cell_column}{cell_row}"] = ""
+                print(f"{cell_row} - {product_code} - Not Found On Hepsiburada")
             excel_file.workbook.save(excel_file.file_path)
         excel_file.workbook.close()
 
@@ -129,8 +125,8 @@ class ProductContentService:
         browser: WebDriver,
         omniens_credentials: AccountCredentials,
         excel_file: ExcelFile,
-        trendyol_product_cells: ExcelCells,
-        hepsiburada_product_cells: ExcelCells,
+        trendyol_product_name_cells: ExcelCells,
+        hepsiburada_product_name_cells: ExcelCells,
         product_codes: [str],
         trendyol_urls: dict,
         hepsiburada_urls: dict,
@@ -161,10 +157,11 @@ class ProductContentService:
                     browser,
                     trendyol_urls[product_code],
                 )
-                excel_file.sheet[
-                    get_column_letter(trendyol_product_cells.column_start)
-                    + f"{trendyol_product_cells.row_start + i}"
-                ] = (
+                cell_column = get_column_letter(
+                    trendyol_product_name_cells.column_start
+                )
+                cell_row = trendyol_product_name_cells.row_start + i
+                excel_file.sheet[f"{cell_column}{cell_row}"] = (
                     "DOĞRU"
                     if trendyol_product_name == omniens_product_name
                     else "YANLIŞ"
@@ -178,10 +175,11 @@ class ProductContentService:
                     browser,
                     hepsiburada_urls[product_code],
                 )
-                excel_file.sheet[
-                    get_column_letter(hepsiburada_product_cells.column_start)
-                    + f"{hepsiburada_product_cells.row_start + i}"
-                ] = (
+                cell_column = get_column_letter(
+                    hepsiburada_product_name_cells.column_start
+                )
+                cell_row = hepsiburada_product_name_cells.row_start + i
+                excel_file.sheet[f"{cell_column}{cell_row}"] = (
                     "DOĞRU"
                     if hepsiburada_product_name == omniens_product_name
                     else "YANLIŞ"
