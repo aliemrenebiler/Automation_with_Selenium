@@ -108,13 +108,16 @@ class ProductContentWorkflows:
     def save_trendyol_product_urls_to_excel(self):
         "Gets product codes from excel file, save Trendyol product URLs to the excel file"
 
+        print("Opening Chrome browser...")
         browser = create_chrome_browser()
         browser.maximize_window()
         try:
+            print("Getting product codes from excel file...")
             product_codes = self._pc_service.get_product_codes_from_excel(
                 self._excel_file,
                 self._product_code_cells,
             )
+            print("Saving Trendyol product URLs to excel...")
             self._pc_service.save_trendyol_product_urls_to_excel(
                 browser,
                 self._trendyol_credentials,
@@ -126,17 +129,21 @@ class ProductContentWorkflows:
         except Exception as exc:
             print(f"Unexpected Error: {str(exc)}")
         browser.close()
+        print("End of workflow.")
 
     def save_hepsiburada_product_urls_to_excel(self):
         "Gets product codes from excel file, save Hepsiburada product URLs to the excel file"
 
+        print("Opening Chrome browser...")
         browser = create_chrome_browser()
         browser.maximize_window()
         try:
+            print("Getting product codes from excel file...")
             product_codes = self._pc_service.get_product_codes_from_excel(
                 self._excel_file,
                 self._product_code_cells,
             )
+            print("Saving Trendyol product URLs to excel...")
             self._pc_service.save_hepsiburada_product_urls_to_excel(
                 browser,
                 self._hepsiburada_credentials,
@@ -148,27 +155,33 @@ class ProductContentWorkflows:
         except Exception as exc:
             print(f"Unexpected Error: {str(exc)}")
         browser.close()
+        print("End of workflow.")
 
     def compare_product_information(self):
         "Gets product codes from excel file, save Hepsiburada product URLs to the excel file"
 
+        print("Opening Chrome browser...")
         browser = create_chrome_browser()
         browser.maximize_window()
         try:
+            print("Getting product codes from excel file...")
             product_codes = self._pc_service.get_product_codes_from_excel(
                 self._excel_file,
                 self._product_code_cells,
             )
+            print("Getting Trendyol product URLs from excel file...")
             trendyol_urls = self._pc_service.get_product_urls_from_excel(
                 self._excel_file,
                 self._product_code_cells,
                 self._trendyol_product_url_cells.column_start,
             )
+            print("Getting Hepsiburada product URLs from excel file...")
             hepsiburada_urls = self._pc_service.get_product_urls_from_excel(
                 self._excel_file,
                 self._product_code_cells,
                 self._hepsiburada_product_url_cells.column_start,
             )
+            print("Creating product information comparison HTML file...")
             self._pc_service.create_product_information_comparison_html(
                 browser,
                 self._omniens_credentials,
@@ -180,3 +193,4 @@ class ProductContentWorkflows:
         except Exception as exc:
             print(f"Unexpected Error: {str(exc)}")
         browser.close()
+        print("End of workflow.")
