@@ -36,6 +36,23 @@
         </tr>
         <tr>
             <td class="table-cell">
+                {%- if product["omniens_name"] -%}
+                {{ product["omniens_name"] }}
+                {%- endif -%}
+            </td>
+            <td class="table-cell">
+                {%- if product["trendyol_name"] -%}
+                {{ product["trendyol_name"] }}
+                {%- endif -%}
+            </td>
+            <td class="table-cell">
+                {%- if product["hepsiburada_name"] -%}
+                {{ product["hepsiburada_name"] }}
+                {%- endif -%}
+            </td>
+        </tr>
+        <tr>
+            <td class="table-cell">
                 {%- if product["omniens_desc"] -%}
                 {{ product["omniens_desc"] }}
                 {%- endif -%}
