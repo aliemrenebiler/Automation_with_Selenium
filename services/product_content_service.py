@@ -220,3 +220,13 @@ class ProductContentService:
                     comparison_html,
                     os.path.join("temp", "product_description_comparison.html"),
                 )
+
+            if trendyol_product_name or trendyol_product_desc:
+                completed_msg = "Completed For: Trendyol"
+                if not hepsiburada_product_name and not hepsiburada_product_desc:
+                    completed_msg += " & Hepsiburada"
+            elif hepsiburada_product_name or hepsiburada_product_desc:
+                completed_msg = "Completed For: Hepsiburada"
+            else:
+                completed_msg = "Not Found"
+            print(f"{product_code} - {completed_msg}")
