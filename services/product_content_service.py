@@ -49,7 +49,7 @@ class ProductContentService:
 
         excel_file.workbook.close()
 
-        return [str(code) for code in product_codes]
+        return [str(code).strip() for code in product_codes]
 
     def get_product_urls_from_excel(
         self,
@@ -79,7 +79,7 @@ class ProductContentService:
         excel_file.workbook.close()
 
         return {
-            str(code): product_urls[i]
+            str(code).strip(): product_urls[i]
             for i, code in enumerate(product_codes)
             if product_urls[i]
         }
