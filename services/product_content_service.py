@@ -138,7 +138,6 @@ class ProductContentService:
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
         products_with_all_desc = []
 
-        handle_hepsiburada_cookie(browser)
         login_to_omniens(
             browser,
             omniens_credentials.username,
@@ -169,6 +168,7 @@ class ProductContentService:
                 )
                 excel_file.workbook.save(excel_file.file_path)
             if product_code in hepsiburada_urls.keys():
+                handle_hepsiburada_cookie(browser)
                 (
                     hepsiburada_product_name,
                     hepsiburada_product_desc,

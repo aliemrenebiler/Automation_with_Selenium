@@ -58,7 +58,7 @@ def login_to_hepsiburada(
     )
 
 
-def handle_hepsiburada_cookie(browser: WebDriver, timeout: int = 10):
+def handle_hepsiburada_cookie(browser: WebDriver, timeout: int = 3):
     "Handles Hepsiburada cookie popup"
 
     try:
