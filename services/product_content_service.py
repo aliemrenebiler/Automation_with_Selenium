@@ -125,17 +125,12 @@ class ProductContentService:
         self,
         browser: WebDriver,
         omniens_credentials: AccountCredentials,
-        excel_file: ExcelFile,
-        trendyol_product_name_cells: ExcelCells,
-        hepsiburada_product_name_cells: ExcelCells,
         product_codes: [str],
         trendyol_urls: dict,
         hepsiburada_urls: dict,
     ):
-        "Compares the Trendyol and Hepsiburada product informations with Omniens"
+        "Compares the Trendyol and Hepsiburada product informations with Omniens, returns an HTML comparison file"
 
-        excel_file.workbook = open_workbook(excel_file.file_path)
-        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
         products_with_all_desc = []
 
         login_to_omniens(
@@ -143,7 +138,7 @@ class ProductContentService:
             omniens_credentials.username,
             omniens_credentials.password,
         )
-        for i, product_code in enumerate(product_codes):
+        for product_code in product_codes:
             trendyol_product_name, trendyol_product_desc = None, None
             hepsiburada_product_name, hepsiburada_product_desc = None, None
             omniens_product_name, omniens_product_desc = get_product_info_from_omniens(
@@ -157,16 +152,6 @@ class ProductContentService:
                     browser,
                     trendyol_urls[product_code],
                 )
-                cell_column = get_column_letter(
-                    trendyol_product_name_cells.column_start
-                )
-                cell_row = trendyol_product_name_cells.row_start + i
-                excel_file.sheet[f"{cell_column}{cell_row}"] = (
-                    "DOĞRU"
-                    if trendyol_product_name == omniens_product_name
-                    else "YANLIŞ"
-                )
-                excel_file.workbook.save(excel_file.file_path)
             if product_code in hepsiburada_urls.keys():
                 handle_hepsiburada_cookie(browser)
                 (
@@ -176,22 +161,20 @@ class ProductContentService:
                     browser,
                     hepsiburada_urls[product_code],
                 )
-                cell_column = get_column_letter(
-                    hepsiburada_product_name_cells.column_start
-                )
-                cell_row = hepsiburada_product_name_cells.row_start + i
-                excel_file.sheet[f"{cell_column}{cell_row}"] = (
-                    "DOĞRU"
-                    if hepsiburada_product_name == omniens_product_name
-                    else "YANLIŞ"
-                )
-                excel_file.workbook.save(excel_file.file_path)
-            if trendyol_product_desc or hepsiburada_product_desc:
+            if (
+                trendyol_product_name
+                or trendyol_product_desc
+                or hepsiburada_product_name
+                or hepsiburada_product_desc
+            ):
                 products_with_all_desc.append(
                     {
                         "code": product_code,
+                        "omniens_name": omniens_product_name,
                         "omniens_desc": omniens_product_desc,
+                        "trendyol_name": trendyol_product_name,
                         "trendyol_desc": trendyol_product_desc,
+                        "hepsiburada_name": hepsiburada_product_name,
                         "hepsiburada_desc": hepsiburada_product_desc,
                     }
                 )
@@ -204,4 +187,3 @@ class ProductContentService:
                     comparison_html,
                     os.path.join("temp", "product_description_comparison.html"),
                 )
-        excel_file.workbook.close()
