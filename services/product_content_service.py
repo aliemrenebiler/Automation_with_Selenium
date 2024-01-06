@@ -12,7 +12,7 @@ from utils.file_utils import save_file
 from utils.hepsiburada_utils import (
     get_product_info_from_hepsiburada,
     get_product_url_from_hepsiburada,
-    handle_hepsiburada_cookie,
+    accept_hepsiburada_cookies,
     login_to_hepsiburada,
 )
 from utils.jinja_utils import create_html_from_jinja_template
@@ -25,6 +25,7 @@ from utils.trendyol_utils import (
 
 # pylint: disable=too-many-locals
 # pylint: disable=too-many-arguments
+# pylint: disable=broad-exception-caught
 
 
 class ProductContentService:
@@ -161,72 +162,71 @@ class ProductContentService:
         product_codes: [str],
         trendyol_urls: dict,
         hepsiburada_urls: dict,
+        omniens_browser: WebDriver | None = None,
     ):
-        "Compares the Trendyol and Hepsiburada product informations with Omniens, returns an HTML comparison file"
+        """
+        Compares the Trendyol and Hepsiburada product informations with Omniens
+        Creates an HTML comparison file
+        """
 
+        omniens_browser = omniens_browser if omniens_browser else browser
         products_with_all_desc = []
 
         login_to_omniens(
-            browser,
+            omniens_browser,
             omniens_credentials.username,
             omniens_credentials.password,
         )
+        accept_hepsiburada_cookies(browser)
         for product_code in product_codes:
-            trendyol_product_name, trendyol_product_desc = None, None
-            hepsiburada_product_name, hepsiburada_product_desc = None, None
-            omniens_product_name, omniens_product_desc = get_product_info_from_omniens(
-                browser, product_code
-            )
-            if product_code in trendyol_urls.keys():
+            try:
+                hepsiburada_product_name, hepsiburada_product_desc = None, None
                 (
-                    trendyol_product_name,
-                    trendyol_product_desc,
-                ) = get_product_info_from_trendyol(
-                    browser,
-                    trendyol_urls[product_code],
+                    omniens_product_name,
+                    omniens_product_desc,
+                ) = get_product_info_from_omniens(omniens_browser, product_code)
+                (trendyol_product_name, trendyol_product_desc) = (
+                    get_product_info_from_trendyol(
+                        browser,
+                        trendyol_urls[product_code],
+                    )
+                    if product_code in trendyol_urls.keys()
+                    else (None, None)
                 )
-            if product_code in hepsiburada_urls.keys():
-                handle_hepsiburada_cookie(browser)
-                (
-                    hepsiburada_product_name,
-                    hepsiburada_product_desc,
-                ) = get_product_info_from_hepsiburada(
-                    browser,
-                    hepsiburada_urls[product_code],
+                (hepsiburada_product_name, hepsiburada_product_desc) = (
+                    get_product_info_from_hepsiburada(
+                        browser,
+                        hepsiburada_urls[product_code],
+                    )
+                    if product_code in hepsiburada_urls.keys()
+                    else (None, None)
                 )
-            if (
-                trendyol_product_name
-                or trendyol_product_desc
-                or hepsiburada_product_name
-                or hepsiburada_product_desc
-            ):
-                products_with_all_desc.append(
-                    {
-                        "code": product_code,
-                        "omniens_name": omniens_product_name,
-                        "omniens_desc": omniens_product_desc,
-                        "trendyol_name": trendyol_product_name,
-                        "trendyol_desc": trendyol_product_desc,
-                        "hepsiburada_name": hepsiburada_product_name,
-                        "hepsiburada_desc": hepsiburada_product_desc,
-                    }
-                )
-                comparison_html = create_html_from_jinja_template(
-                    os.path.join("templates", "jinja"),
-                    os.path.join("product_desc_comparison.html"),
-                    {"products": products_with_all_desc},
-                )
-                save_file(
-                    comparison_html,
-                    os.path.join("temp", "product_description_comparison.html"),
-                )
-
-            if trendyol_product_name or trendyol_product_desc:
-                completed_msg = "Completed For: Trendyol"
-                if not hepsiburada_product_name and not hepsiburada_product_desc:
-                    completed_msg += " & Hepsiburada"
-            elif hepsiburada_product_name or hepsiburada_product_desc:
-                completed_msg = "Completed For: Hepsiburada"
-            else:
-                completed_msg = "Not Found"
-            print(f"{product_code} - {completed_msg}")
+                if (
+                    trendyol_product_name
+                    or trendyol_product_desc
+                    or hepsiburada_product_name
+                    or hepsiburada_product_desc
+                ):
+                    products_with_all_desc.append(
+                        {
+                            "code": product_code,
+                            "omniens_name": omniens_product_name,
+                            "omniens_desc": omniens_product_desc,
+                            "trendyol_name": trendyol_product_name,
+                            "trendyol_desc": trendyol_product_desc,
+                            "hepsiburada_name": hepsiburada_product_name,
+                            "hepsiburada_desc": hepsiburada_product_desc,
+                        }
+                    )
+                    comparison_html = create_html_from_jinja_template(
+                        os.path.join("templates", "jinja"),
+                        os.path.join("product_desc_comparison.html"),
+                        {"products": products_with_all_desc},
+                    )
+                    save_file(
+                        comparison_html,
+                        os.path.join("temp", "product_description_comparison.html"),
+                    )
+                print(f"{product_code} - Added to comparison.")
+            except Exception as exc:
+                print(f"{product_code} - Error: {str(exc)} ")
