@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from models.errors import LoginError, WebDriverError
 
 from models.web_driver import WebDriver
 
@@ -12,81 +13,95 @@ from models.web_driver import WebDriver
 
 
 def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int = 300):
-    "Logins to Trendyol"
+    "Logins to Omniens"
 
-    browser.get("https://platform.omniens.com/login")
+    try:
+        browser.get("https://platform.omniens.com/login")
 
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//input[@name="username"]',
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//input[@name="username"]',
+                )
             )
-        )
-    ).send_keys(email)
+        ).send_keys(email)
 
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//input[@name="pass"]',
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//input[@name="pass"]',
+                )
             )
-        )
-    ).send_keys(password)
+        ).send_keys(password)
 
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//button[@class="login100-form-btn"]',
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//button[@class="login100-form-btn"]',
+                )
             )
-        )
-    ).click()
+        ).click()
 
-    WebDriverWait(browser, timeout).until(
-        EC.url_to_be("https://platform.omniens.com/performance-dashboard")
-    )
+        WebDriverWait(browser, timeout).until(
+            EC.url_to_be("https://platform.omniens.com/performance-dashboard")
+        )
+    except Exception as exc:
+        raise LoginError("Could not login to Omniens.") from exc
 
 
 def get_product_info_from_omniens(
     browser: WebDriver, product_code: str, timeout: int = 10
-) -> (str, str | None):
-    "Gets the URL of the product with specified code from Trendyol"
+) -> (str | None, str | None):
+    "Gets the product name and description on Omniens"
 
-    browser.get("https://platform.omniens.com/_product/product/list")
+    try:
+        browser.get("https://platform.omniens.com/_product/product/list")
+    except Exception as exc:
+        raise WebDriverError(
+            "Could not get product information, could not reach Omniens product page."
+        ) from exc
 
-    WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                '//input[@placeholder="anahtar kelime aratın"]',
-            )
-        )
-    ).send_keys(product_code, Keys.ENTER)
-
-    product_element = WebDriverWait(browser, timeout).until(
-        EC.presence_of_element_located(
-            (
-                By.XPATH,
-                f'//tbody//span[contains(text(), "{product_code}")]',
-            )
-        )
-    )
-    action = ActionChains(browser)
-    action.double_click(product_element).perform()
-
-    product_name = (
-        WebDriverWait(browser, timeout)
-        .until(
+    try:
+        WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    '//input[@placeholder="Ürün Adı"]',
+                    '//input[@placeholder="anahtar kelime aratın"]',
+                )
+            )
+        ).send_keys(product_code, Keys.ENTER)
+
+        product_element = WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    f'//tbody//span[contains(text(), "{product_code}")]',
                 )
             )
         )
-        .get_attribute("value")
-    )
+        action = ActionChains(browser)
+        action.double_click(product_element).perform()
+    except Exception as exc:
+        raise WebDriverError("Could not get product element on Omniens.") from exc
+
+    try:
+        product_name = (
+            WebDriverWait(browser, timeout)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//input[@placeholder="Ürün Adı"]',
+                    )
+                )
+            )
+            .get_attribute("value")
+        )
+    except Exception:
+        product_name = None
 
     try:
         product_desc_child_elements = (
