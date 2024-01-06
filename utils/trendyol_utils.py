@@ -123,6 +123,22 @@ def get_product_info_from_trendyol(
         ) from exc
 
     try:
+        product_name_brand = (
+            WebDriverWait(browser, timeout)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//a[@class="product-brand-name-with-link"]',
+                    )
+                )
+            )
+            .text
+        )
+    except Exception:
+        product_name_brand = None
+
+    try:
         product_name = (
             WebDriverWait(browser, timeout)
             .until(
@@ -135,6 +151,8 @@ def get_product_info_from_trendyol(
             )
             .text
         )
+        if product_name_brand:
+            product_name = f"{product_name_brand} {product_name}"
     except Exception:
         product_name = None
 
