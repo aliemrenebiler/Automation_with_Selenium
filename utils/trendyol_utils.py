@@ -145,7 +145,7 @@ def get_product_info_from_trendyol(
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        '//div[@id="rich-content-wrapper"]',
+                        '//div[@class="info-wrapper"]',
                     )
                 )
             )
