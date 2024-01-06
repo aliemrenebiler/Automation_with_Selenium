@@ -80,7 +80,7 @@ def get_product_url_from_hepsiburada(
     try:
         browser.get(
             "https://merchant.hepsiburada.com/v2/listings?"
-            + f"tab=onSale&page=1&pageSize=10&search={product_code}"
+            + f"tab=all&page=1&pageSize=10&search={product_code}"
         )
 
         try:
