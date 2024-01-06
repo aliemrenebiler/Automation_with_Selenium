@@ -23,6 +23,7 @@ from utils.trendyol_utils import (
     login_to_trendyol,
 )
 
+# pylint: disable=too-many-locals
 # pylint: disable=too-many-arguments
 
 
@@ -48,7 +49,7 @@ class ProductContentService:
 
         excel_file.workbook.close()
 
-        return product_codes
+        return [str(code) for code in product_codes]
 
     def save_trendyol_product_urls_to_excel(
         self,
