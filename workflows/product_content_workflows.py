@@ -122,9 +122,9 @@ class ProductContentWorkflows:
                 self._trendyol_product_url_cells,
                 product_codes,
             )
-            print("Completed Successfully")
-        except Exception as error:
-            print(f"Unexpected Error: {str(error)}")
+            print("Completed successfully.")
+        except Exception as exc:
+            print(f"Unexpected Error: {str(exc)}")
         browser.close()
 
     def save_hepsiburada_product_urls_to_excel(self):
@@ -144,9 +144,9 @@ class ProductContentWorkflows:
                 self._hepsiburada_product_url_cells,
                 product_codes,
             )
-            print("Completed Successfully")
-        except Exception as error:
-            print(f"Unexpected Error: {str(error)}")
+            print("Completed successfully.")
+        except Exception as exc:
+            print(f"Unexpected Error: {str(exc)}")
         browser.close()
 
     def compare_product_information(self):
@@ -176,7 +176,7 @@ class ProductContentWorkflows:
                 trendyol_urls,
                 hepsiburada_urls,
             )
-            print("Completed Successfully")
-        except Exception as error:
-            print(f"Unexpected Error: {str(error)}")
+            print("Completed successfully.")
+        except Exception as exc:
+            print(f"Unexpected Error: {str(exc)}")
         browser.close()
