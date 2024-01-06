@@ -50,7 +50,7 @@ class ProductContentService:
 
         excel_file.workbook.close()
 
-        return [str(code).strip() for code in product_codes]
+        return [str(product_code).strip() for product_code in product_codes]
 
     def get_product_urls_from_excel(
         self,
@@ -80,8 +80,8 @@ class ProductContentService:
         excel_file.workbook.close()
 
         return {
-            str(code).strip(): product_urls[i]
-            for i, code in enumerate(product_codes)
+            str(product_code).strip(): product_urls[i]
+            for i, product_code in enumerate(product_codes)
             if product_urls[i]
         }
 
@@ -97,7 +97,7 @@ class ProductContentService:
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-        product_urls = {}
+        product_url_code_mapping = {}
 
         login_to_trendyol(
             browser,
@@ -105,20 +105,29 @@ class ProductContentService:
             trendyol_credentials.password,
         )
         for i, product_code in enumerate(product_codes):
-            product_url = get_product_url_from_trendyol(browser, product_code)
-            product_urls[product_code] = product_url
             cell_column = get_column_letter(trendyol_product_url_cells.column_start)
             cell_row = trendyol_product_url_cells.row_start + i
-            if product_url:
-                excel_file.sheet[f"{cell_column}{cell_row}"] = product_url
-                print(f"{cell_row} - {product_code} - Trendyol URL: {product_url}")
-            else:
-                excel_file.sheet[f"{cell_column}{cell_row}"] = ""
-                print(f"{cell_row} - {product_code} - Not Found On Trendyol")
-            excel_file.workbook.save(excel_file.file_path)
+            try:
+                product_url = get_product_url_from_trendyol(browser, product_code)
+                if product_url:
+                    product_url_code_mapping[product_code] = product_url
+                excel_file.sheet[f"{cell_column}{cell_row}"] = (
+                    product_url if product_url else ""
+                )
+                excel_file.workbook.save(excel_file.file_path)
+                print(
+                    f"{cell_row} - {product_code} - "
+                    + (
+                        f"Trendyol URL: {product_url}"
+                        if product_url
+                        else "Not Found on Trendyol"
+                    )
+                )
+            except Exception as exc:
+                print(f"{cell_row} - {product_code} - Error: {str(exc)}")
         excel_file.workbook.close()
 
-        return product_urls
+        return product_url_code_mapping
 
     def save_hepsiburada_product_urls_to_excel(
         self,
@@ -132,7 +141,7 @@ class ProductContentService:
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-        product_urls = {}
+        product_url_code_mapping = {}
 
         login_to_hepsiburada(
             browser,
@@ -140,20 +149,29 @@ class ProductContentService:
             hepsiburada_credentials.password,
         )
         for i, product_code in enumerate(product_codes):
-            product_url = get_product_url_from_hepsiburada(browser, product_code)
-            product_urls[product_code] = product_url
             cell_column = get_column_letter(hepsiburada_product_url_cells.column_start)
             cell_row = hepsiburada_product_url_cells.row_start + i
-            if product_url:
-                excel_file.sheet[f"{cell_column}{cell_row}"] = product_url
-                print(f"{cell_row} - {product_code} - Hepsiburada URL: {product_url}")
-            else:
-                excel_file.sheet[f"{cell_column}{cell_row}"] = ""
-                print(f"{cell_row} - {product_code} - Not Found On Hepsiburada")
-            excel_file.workbook.save(excel_file.file_path)
+            try:
+                product_url = get_product_url_from_hepsiburada(browser, product_code)
+                if product_url:
+                    product_url_code_mapping[product_code] = product_url
+                excel_file.sheet[f"{cell_column}{cell_row}"] = (
+                    product_url if product_url else ""
+                )
+                excel_file.workbook.save(excel_file.file_path)
+                print(
+                    f"{cell_row} - {product_code} - "
+                    + (
+                        f"Hepsiburada URL: {product_url}"
+                        if product_url
+                        else "Not Found on Hepsiburada"
+                    )
+                )
+            except Exception as exc:
+                print(f"{cell_row} - {product_code} - Error: {str(exc)}")
         excel_file.workbook.close()
 
-        return product_urls
+        return product_url_code_mapping
 
     def create_product_information_comparison_html(
         self,
