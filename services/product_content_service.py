@@ -154,7 +154,7 @@ class ProductContentService:
 
         return product_urls
 
-    def compare_product_info(
+    def create_product_information_comparison_html(
         self,
         browser: WebDriver,
         omniens_credentials: AccountCredentials,
