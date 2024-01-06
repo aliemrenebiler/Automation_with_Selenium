@@ -154,6 +154,13 @@ def main():
             product_codes,
         )
 
+        pc_service.compare_product_info(
+            browser,
+            omniens_credentials,
+            product_codes,
+            trendyol_product_urls,
+            hepsiburada_product_urls,
+        )
     except Exception:
         print("An unexpected error occured.")
 
