@@ -6,9 +6,10 @@
 class AccountCredentials:
     "Account Credentials Model Class"
 
-    username: str
-    password: str
-
-    def __init__(self, username, password):
+    def __init__(
+        self,
+        username: str,
+        password: str,
+    ):
         self.username = username
         self.password = password

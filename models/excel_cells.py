@@ -6,12 +6,13 @@
 class ExcelCells:
     "Excel Cells Model Class"
 
-    row_start: int
-    column_start: int
-    row_end: int | None
-    column_end: int | None
-
-    def __init__(self, row_start, column_start, row_end=None, column_end=None):
+    def __init__(
+        self,
+        row_start: int,
+        column_start: int,
+        row_end: int | None = None,
+        column_end: int | None = None,
+    ):
         self.row_start = row_start
         self.column_start = column_start
         self.row_end = row_end
