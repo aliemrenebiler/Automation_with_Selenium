@@ -46,7 +46,7 @@ def _get_configs():
         raise ConfigError(str(exc)) from exc
 
 
-def compare_product_infos_with_ty_and_hb():
+def compare_omniens_product_infos_with_ty_and_hb():
     "Creates a comparison HTML file for Omniens, Trendyol and Hepsiburada"
 
     product_content_service = ProductContentService()
