@@ -69,6 +69,8 @@ def get_product_info_from_omniens(
 ) -> (str | None, str | None):
     "Gets the product name and description on Omniens"
 
+    action = ActionChains(browser)
+
     products_page_url = "https://platform.omniens.com/_product/product/list"
     try:
         if browser.current_url != products_page_url:
@@ -96,7 +98,6 @@ def get_product_info_from_omniens(
                 )
             )
         )
-        action = ActionChains(browser)
         action.double_click(product_element).perform()
     except Exception as exc:
         raise WebDriverError("Could not get product element on Omniens.") from exc
@@ -118,21 +119,22 @@ def get_product_info_from_omniens(
         product_name = None
 
     try:
-        product_desc_child_elements = (
-            WebDriverWait(browser, timeout)
-            .until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[@class="angular-editor-textarea"]',
-                    )
+        product_desc_element = WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//div[@class="angular-editor-textarea"]',
                 )
             )
-            .find_elements(By.XPATH, "*")
         )
 
+        action.move_to_element(product_desc_element).perform()
+        product_desc_child_elements = product_desc_element.find_elements(By.XPATH, "*")
         product_desc = "".join(
-            [child.get_attribute("outerHTML") for child in product_desc_child_elements]
+            [
+                prodct_desc_child_element.get_attribute("outerHTML")
+                for prodct_desc_child_element in product_desc_child_elements
+            ]
         )
     except Exception:
         product_desc = None
