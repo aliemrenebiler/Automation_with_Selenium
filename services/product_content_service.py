@@ -101,7 +101,8 @@ class ProductContentService:
         trendyol_credentials: AccountCredentials,
         product_codes: [str],
         excel_file: ExcelFile,
-        trendyol_product_url_cells: ExcelCells,
+        excel_product_url_column: int,
+        excel_product_url_row_start: int,
     ) -> dict:
         "Gets the product URLs from Trendyol and saves them to excel file"
 
@@ -114,9 +115,9 @@ class ProductContentService:
             trendyol_credentials.username,
             trendyol_credentials.password,
         )
+        cell_column = get_column_letter(excel_product_url_column)
         for i, product_code in enumerate(product_codes):
-            cell_column = get_column_letter(trendyol_product_url_cells.column)
-            cell_row = trendyol_product_url_cells.row.start + i
+            cell_row = excel_product_url_row_start + i
             try:
                 product_url = get_product_url_from_trendyol(browser, product_code)
                 if product_url:
@@ -145,7 +146,8 @@ class ProductContentService:
         hepsiburada_credentials: AccountCredentials,
         product_codes: [str],
         excel_file: ExcelFile,
-        hepsiburada_product_url_cells: ExcelCells,
+        excel_product_url_column: int,
+        excel_product_url_row_start: int,
     ) -> dict:
         "Gets the product URLs from Hepsiburada and saves them to excel file"
 
@@ -158,9 +160,9 @@ class ProductContentService:
             hepsiburada_credentials.username,
             hepsiburada_credentials.password,
         )
+        cell_column = get_column_letter(excel_product_url_column)
         for i, product_code in enumerate(product_codes):
-            cell_column = get_column_letter(hepsiburada_product_url_cells.column)
-            cell_row = hepsiburada_product_url_cells.row.start + i
+            cell_row = excel_product_url_row_start + i
             try:
                 product_url = get_product_url_from_hepsiburada(browser, product_code)
                 if product_url:
