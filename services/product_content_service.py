@@ -8,8 +8,7 @@ from common.constants.file_and_folder_paths import (
     TEMP_FOLDER_PATH,
 )
 from models.account_credentials import AccountCredentials
-from models.excel_cells import ExcelCells
-from models.excel_file import ExcelFile
+from models.excel import ExcelFile, ExcelCells, ExcelRange
 from models.web_driver import WebDriver
 from utils.excel_utils import get_column_data_from_excel_sheet, open_workbook
 from utils.file_utils import save_file
@@ -53,9 +52,9 @@ class ProductContentService:
 
         product_codes = get_column_data_from_excel_sheet(
             excel_file.sheet,
-            product_code_cells.column_start,
-            product_code_cells.row_start,
-            product_code_cells.row_end,
+            product_code_cells.column,
+            product_code_cells.row.start,
+            product_code_cells.row.end,
         )
 
         excel_file.workbook.close()
@@ -65,7 +64,8 @@ class ProductContentService:
     def get_product_urls_from_excel(
         self,
         excel_file: ExcelFile,
-        product_code_cells: ExcelCells,
+        product_rows: ExcelRange,
+        product_code_column: int,
         product_url_column: int,
     ) -> dict:
         "Gets all product URLs from specified column and in excel sheet"
@@ -75,16 +75,16 @@ class ProductContentService:
 
         product_codes = get_column_data_from_excel_sheet(
             excel_file.sheet,
-            product_code_cells.column_start,
-            product_code_cells.row_start,
-            product_code_cells.row_end,
+            product_code_column,
+            product_rows.start,
+            product_rows.end,
         )
 
         product_urls = get_column_data_from_excel_sheet(
             excel_file.sheet,
             product_url_column,
-            product_code_cells.row_start,
-            product_code_cells.row_end,
+            product_rows.start,
+            product_rows.end,
         )
 
         excel_file.workbook.close()
@@ -99,9 +99,9 @@ class ProductContentService:
         self,
         browser: WebDriver,
         trendyol_credentials: AccountCredentials,
+        product_codes: [str],
         excel_file: ExcelFile,
         trendyol_product_url_cells: ExcelCells,
-        product_codes: [str],
     ) -> dict:
         "Gets the product URLs from Trendyol and saves them to excel file"
 
@@ -115,8 +115,8 @@ class ProductContentService:
             trendyol_credentials.password,
         )
         for i, product_code in enumerate(product_codes):
-            cell_column = get_column_letter(trendyol_product_url_cells.column_start)
-            cell_row = trendyol_product_url_cells.row_start + i
+            cell_column = get_column_letter(trendyol_product_url_cells.column)
+            cell_row = trendyol_product_url_cells.row.start + i
             try:
                 product_url = get_product_url_from_trendyol(browser, product_code)
                 if product_url:
@@ -143,9 +143,9 @@ class ProductContentService:
         self,
         browser: WebDriver,
         hepsiburada_credentials: AccountCredentials,
+        product_codes: [str],
         excel_file: ExcelFile,
         hepsiburada_product_url_cells: ExcelCells,
-        product_codes: [str],
     ) -> dict:
         "Gets the product URLs from Hepsiburada and saves them to excel file"
 
@@ -159,8 +159,8 @@ class ProductContentService:
             hepsiburada_credentials.password,
         )
         for i, product_code in enumerate(product_codes):
-            cell_column = get_column_letter(hepsiburada_product_url_cells.column_start)
-            cell_row = hepsiburada_product_url_cells.row_start + i
+            cell_column = get_column_letter(hepsiburada_product_url_cells.column)
+            cell_row = hepsiburada_product_url_cells.row.start + i
             try:
                 product_url = get_product_url_from_hepsiburada(browser, product_code)
                 if product_url:
