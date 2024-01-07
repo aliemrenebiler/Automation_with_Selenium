@@ -69,8 +69,10 @@ def get_product_info_from_omniens(
 ) -> (str | None, str | None):
     "Gets the product name and description on Omniens"
 
+    products_page_url = "https://platform.omniens.com/_product/product/list"
     try:
-        browser.get("https://platform.omniens.com/_product/product/list")
+        if browser.current_url != products_page_url:
+            browser.get(products_page_url)
     except Exception as exc:
         raise WebDriverError(
             "Could not get product information, could not reach Omniens product page."
