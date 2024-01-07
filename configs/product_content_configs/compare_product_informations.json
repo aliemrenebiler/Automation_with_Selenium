@@ -1,0 +1,11 @@
+{
+    "omniens_username": "",
+    "omniens_password": "",
+    "excel_file_path": "",
+    "excel_sheet_name": "",
+    "excel_product_codes_column": 0,
+    "excel_trendyol_product_urls_column": 0,
+    "excel_hepsiburada_product_urls_column": 0,
+    "excel_product_rows_start": 0,
+    "excel_product_rows_end": 0
+}
