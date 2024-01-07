@@ -1,5 +1,6 @@
 "Trendyol Utils"
 
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,18 +97,11 @@ def get_product_url_from_trendyol(
                     '//bl-input[@cy-id="stockCodeFilter"]',
                 )
             )
-        ).send_keys(product_code)
-
-        WebDriverWait(browser, timeout).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//bl-button[@cy-id="submitFilter"]',
-                )
-            )
-        ).click()
+        ).send_keys(product_code, Keys.ENTER)
     except Exception as exc:
-        raise WebDriverError("Error during Trendyol product search.") from exc
+        raise WebDriverError(
+            "Error during product search on Trendyol partner page."
+        ) from exc
 
     try:
         product_url = (
@@ -117,6 +111,12 @@ def get_product_url_from_trendyol(
                     (
                         By.XPATH,
                         "//sc-product-info",
+                    )
+                )
+                or EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@class="not_found"]',
                     )
                 )
             )
