@@ -101,7 +101,7 @@ def get_product_url_from_trendyol(
                 )
             )
         )
-        search_input_element.clear()
+        search_input_element.send_keys(Keys.CONTROL + "A", Keys.BACK_SPACE)
         search_input_element.send_keys(product_code, Keys.ENTER)
     except Exception as exc:
         raise WebDriverError(
