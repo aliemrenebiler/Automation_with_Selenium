@@ -16,7 +16,11 @@ from utils.hepsiburada_utils import (
     login_to_hepsiburada,
 )
 from utils.jinja_utils import create_html_from_jinja_template
-from utils.omniens_utils import get_product_info_from_omniens, login_to_omniens
+from utils.omniens_utils import (
+    get_product_info_from_omniens,
+    logged_in_to_omniens,
+    login_to_omniens,
+)
 from utils.trendyol_utils import (
     get_product_info_from_trendyol,
     get_product_url_from_trendyol,
@@ -198,7 +202,12 @@ class ProductContentService:
         accept_hepsiburada_cookies(browser)
         for product_code in product_codes:
             try:
-                hepsiburada_product_name, hepsiburada_product_desc = None, None
+                if not logged_in_to_omniens(omniens_browser):
+                    login_to_omniens(
+                        omniens_browser,
+                        omniens_credentials.username,
+                        omniens_credentials.password,
+                    )
                 (
                     omniens_product_name,
                     omniens_product_desc,
