@@ -5,6 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from common.constants.urls import (
+    TRENDYOL_MAIN_PAGE_URL,
+    TRENDYOL_PARTNER_PRODUCTS_PAGE_URL,
+    TRENDYOL_PARTNER_DASHBOARD_PAGE_URL,
+    TRENDYOL_PARTNER_LOGIN_PAGE_URL,
+    TRENDYOL_PARTNER_REDIRECT_AFTER_LOGIN_PAGE_URL,
+)
 from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
 
@@ -16,10 +23,9 @@ def login_to_trendyol(
 ):
     "Logins to Trendyol"
 
-    login_page_url = "https://partner.trendyol.com/account/login"
     try:
-        if browser.current_url != login_page_url:
-            browser.get(login_page_url)
+        if browser.current_url != TRENDYOL_PARTNER_LOGIN_PAGE_URL:
+            browser.get(TRENDYOL_PARTNER_LOGIN_PAGE_URL)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -50,11 +56,8 @@ def login_to_trendyol(
         ).click()
 
         WebDriverWait(browser, timeout).until(
-            EC.url_to_be("https://partner.trendyol.com/dashboard")
-            or EC.url_to_be(
-                "https://partner.trendyol.com/account/info"
-                + "?tab=contractAndDocuments&openApproveModal=true"
-            )
+            EC.url_to_be(TRENDYOL_PARTNER_DASHBOARD_PAGE_URL)
+            or EC.url_to_be(TRENDYOL_PARTNER_REDIRECT_AFTER_LOGIN_PAGE_URL)
         )
     except Exception as exc:
         raise LoginError("Could not login to Trendyol.") from exc
@@ -63,10 +66,9 @@ def login_to_trendyol(
 def accept_trendyol_cookies(browser: WebDriver, timeout: int = 10):
     "Accepts Trendyol cookies"
 
-    main_page_url = "https://www.trendyol.com/"
     try:
-        if browser.current_url != main_page_url:
-            browser.get(main_page_url)
+        if browser.current_url != TRENDYOL_MAIN_PAGE_URL:
+            browser.get(TRENDYOL_MAIN_PAGE_URL)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -85,10 +87,9 @@ def get_product_url_from_trendyol(
 ) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
 
-    products_page_url = "https://partner.trendyol.com/product-listing/all-products"
     try:
-        if browser.current_url != products_page_url:
-            browser.get(products_page_url)
+        if browser.current_url != TRENDYOL_PARTNER_PRODUCTS_PAGE_URL:
+            browser.get(TRENDYOL_PARTNER_PRODUCTS_PAGE_URL)
     except Exception as exc:
         raise WebDriverError("Could not found Trendyol partner products page.") from exc
 

@@ -3,6 +3,13 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from common.constants.urls import (
+    HEPSIBURADA_MAIN_PAGE_URL,
+    HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL,
+    HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL,
+    HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL,
+    HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL,
+)
 
 from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
@@ -15,10 +22,9 @@ def login_to_hepsiburada(
 ):
     "Logins to Hepsiburada"
 
-    login_page_url = "https://merchant.hepsiburada.com/v2/login"
     try:
-        if browser.current_url != login_page_url:
-            browser.get(login_page_url)
+        if browser.current_url != HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL:
+            browser.get(HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -57,8 +63,8 @@ def login_to_hepsiburada(
         ).click()
 
         WebDriverWait(browser, timeout).until(
-            EC.url_to_be("https://merchant.hepsiburada.com/v2/dashboard")
-            or EC.url_to_be("https://merchant.hepsiburada.com/v2/listing?tab=onSale")
+            EC.url_to_be(HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL)
+            or EC.url_to_be(HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL)
         )
     except Exception as exc:
         raise LoginError("Could not login to Hepsiburada.") from exc
@@ -67,10 +73,9 @@ def login_to_hepsiburada(
 def accept_hepsiburada_cookies(browser: WebDriver, timeout: int = 10):
     "Accepts Hepsiburada cookies"
 
-    main_page_url = "https://www.hepsiburada.com/"
     try:
-        if browser.current_url != main_page_url:
-            browser.get(main_page_url)
+        if browser.current_url != HEPSIBURADA_MAIN_PAGE_URL:
+            browser.get(HEPSIBURADA_MAIN_PAGE_URL)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -89,10 +94,7 @@ def get_product_url_from_hepsiburada(
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsiburada"
 
-    product_search_url = (
-        "https://merchant.hepsiburada.com/v2/listings?"
-        + f"tab=all&page=1&pageSize=10&search={product_code}"
-    )
+    product_search_url = f"{HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL}{product_code}"
     try:
         if browser.current_url != product_search_url:
             browser.get(product_search_url)

@@ -5,6 +5,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from common.constants.urls import (
+    OMNIENS_LOGIN_PAGE_URL,
+    OMNIENS_PRODUCTS_PAGE_URL,
+    OMNIENS_DASHBOARD_PAGE_URL,
+)
 
 from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
@@ -15,10 +20,9 @@ from models.web_driver import WebDriver
 def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int = 300):
     "Logins to Omniens"
 
-    login_page_url = "https://platform.omniens.com/login"
     try:
-        if browser.current_url != login_page_url:
-            browser.get(login_page_url)
+        if browser.current_url != OMNIENS_LOGIN_PAGE_URL:
+            browser.get(OMNIENS_LOGIN_PAGE_URL)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -47,9 +51,7 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
             )
         ).click()
 
-        WebDriverWait(browser, timeout).until(
-            EC.url_to_be("https://platform.omniens.com/performance-dashboard")
-        )
+        WebDriverWait(browser, timeout).until(EC.url_to_be(OMNIENS_DASHBOARD_PAGE_URL))
     except Exception as exc:
         raise LoginError("Could not login to Omniens.") from exc
 
@@ -57,10 +59,9 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
 def logged_in_to_omniens(browser: WebDriver, timeout: int = 10) -> bool:
     "Checks if still logged in to Omniens"
 
-    products_page_url = "https://platform.omniens.com/_product/product/list"
     try:
-        browser.get(products_page_url)
-        WebDriverWait(browser, timeout).until(EC.url_to_be(products_page_url))
+        browser.get(OMNIENS_PRODUCTS_PAGE_URL)
+        WebDriverWait(browser, timeout).until(EC.url_to_be(OMNIENS_PRODUCTS_PAGE_URL))
         return True
     except Exception:
         return False
@@ -71,10 +72,9 @@ def get_product_info_from_omniens(
 ) -> (str | None, str | None):
     "Gets the product name and description on Omniens"
 
-    products_page_url = "https://platform.omniens.com/_product/product/list"
     try:
-        if browser.current_url != products_page_url:
-            browser.get(products_page_url)
+        if browser.current_url != OMNIENS_PRODUCTS_PAGE_URL:
+            browser.get(OMNIENS_PRODUCTS_PAGE_URL)
     except Exception as exc:
         raise WebDriverError(
             "Could not get product information, could not reach Omniens product page."
