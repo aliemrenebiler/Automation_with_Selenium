@@ -57,8 +57,26 @@ def login_to_trendyol(
         raise LoginError("Could not login to Trendyol.") from exc
 
 
+def accept_trendyol_cookies(browser: WebDriver, timeout: int = 10):
+    "Accepts Trendyol cookies"
+
+    try:
+        browser.get("https://www.trendyol.com/")
+
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//button[@id="onetrust-accept-btn-handler"]',
+                )
+            )
+        ).click()
+    except Exception as exc:
+        raise WebDriverError("Error during accepting Trendyol cookies.") from exc
+
+
 def get_product_url_from_trendyol(
-    browser: WebDriver, product_code: str, timeout: int = 3
+    browser: WebDriver, product_code: str, timeout: int = 10
 ) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
     try:
@@ -111,7 +129,7 @@ def get_product_url_from_trendyol(
 
 
 def get_product_info_from_trendyol(
-    browser: WebDriver, product_url: str, timeout: int = 3
+    browser: WebDriver, product_url: str, timeout: int = 10
 ) -> (str | None, str | None):
     "Gets the product name and description on Trendyol"
 
