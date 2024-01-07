@@ -15,8 +15,10 @@ def login_to_hepsiburada(
 ):
     "Logins to Hepsiburada"
 
+    login_page_url = "https://merchant.hepsiburada.com/v2/login"
     try:
-        browser.get("https://merchant.hepsiburada.com/v2/login")
+        if browser.current_url != login_page_url:
+            browser.get(login_page_url)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -65,8 +67,10 @@ def login_to_hepsiburada(
 def accept_hepsiburada_cookies(browser: WebDriver, timeout: int = 10):
     "Accepts Hepsiburada cookies"
 
+    main_page_url = "https://www.hepsiburada.com/"
     try:
-        browser.get("https://www.hepsiburada.com/")
+        if browser.current_url != main_page_url:
+            browser.get(main_page_url)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -85,11 +89,13 @@ def get_product_url_from_hepsiburada(
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsiburada"
 
+    product_search_url = (
+        "https://merchant.hepsiburada.com/v2/listings?"
+        + f"tab=all&page=1&pageSize=10&search={product_code}"
+    )
     try:
-        browser.get(
-            "https://merchant.hepsiburada.com/v2/listings?"
-            + f"tab=all&page=1&pageSize=10&search={product_code}"
-        )
+        if browser.current_url != product_search_url:
+            browser.get(product_search_url)
     except Exception as exc:
         raise WebDriverError(
             "Could not found Hepsiburada merchant products page."
@@ -126,7 +132,8 @@ def get_product_info_from_hepsiburada(
     "Gets the product name and description on Hepsiburada"
 
     try:
-        browser.get(product_url)
+        if browser.current_url != product_url:
+            browser.get(product_url)
     except Exception as exc:
         raise WebDriverError(
             "Could not get product information, could not reach Hepsiburada product page."

@@ -15,8 +15,10 @@ from models.web_driver import WebDriver
 def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int = 300):
     "Logins to Omniens"
 
+    login_page_url = "https://platform.omniens.com/login"
     try:
-        browser.get("https://platform.omniens.com/login")
+        if browser.current_url != login_page_url:
+            browser.get(login_page_url)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -69,8 +71,6 @@ def get_product_info_from_omniens(
 ) -> (str | None, str | None):
     "Gets the product name and description on Omniens"
 
-    action = ActionChains(browser)
-
     products_page_url = "https://platform.omniens.com/_product/product/list"
     try:
         if browser.current_url != products_page_url:
@@ -80,6 +80,7 @@ def get_product_info_from_omniens(
             "Could not get product information, could not reach Omniens product page."
         ) from exc
 
+    action = ActionChains(browser)
     try:
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(

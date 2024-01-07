@@ -16,8 +16,10 @@ def login_to_trendyol(
 ):
     "Logins to Trendyol"
 
+    login_page_url = "https://partner.trendyol.com/account/login"
     try:
-        browser.get("https://partner.trendyol.com/account/login")
+        if browser.current_url != login_page_url:
+            browser.get(login_page_url)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -61,8 +63,10 @@ def login_to_trendyol(
 def accept_trendyol_cookies(browser: WebDriver, timeout: int = 10):
     "Accepts Trendyol cookies"
 
+    main_page_url = "https://www.trendyol.com/"
     try:
-        browser.get("https://www.trendyol.com/")
+        if browser.current_url != main_page_url:
+            browser.get(main_page_url)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -80,12 +84,11 @@ def get_product_url_from_trendyol(
     browser: WebDriver, product_code: str, timeout: int = 10
 ) -> str | None:
     "Gets the URL of the product with specified code from Trendyol"
+
+    products_page_url = "https://partner.trendyol.com/product-listing/all-products"
     try:
-        if (
-            browser.current_url
-            != "https://partner.trendyol.com/product-listing/all-products"
-        ):
-            browser.get("https://partner.trendyol.com/product-listing/all-products")
+        if browser.current_url != products_page_url:
+            browser.get(products_page_url)
     except Exception as exc:
         raise WebDriverError("Could not found Trendyol partner products page.") from exc
 
@@ -134,7 +137,8 @@ def get_product_info_from_trendyol(
     "Gets the product name and description on Trendyol"
 
     try:
-        browser.get(product_url)
+        if browser.current_url != product_url:
+            browser.get(product_url)
     except Exception as exc:
         raise WebDriverError(
             "Could not get product information, could not reach Trendyol product page."
