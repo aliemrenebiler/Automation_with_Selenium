@@ -5,8 +5,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from models.errors import LoginError, WebDriverError
 
+from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
 
 # pylint: disable=broad-except
