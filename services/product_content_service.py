@@ -2,6 +2,11 @@
 
 import os
 from openpyxl.utils import get_column_letter
+from common.constants.file_and_folder_paths import (
+    JINJA_FOLDER_PATH,
+    PRODUCT_DESC_COMPARISON_JINJA_TEMPLATE,
+    TEMP_FOLDER_PATH,
+)
 from models.account_credentials import AccountCredentials
 from models.excel_cells import ExcelCells
 from models.excel_file import ExcelFile
@@ -242,13 +247,16 @@ class ProductContentService:
                     }
                 )
                 comparison_html = create_html_from_jinja_template(
-                    os.path.join("templates", "jinja"),
-                    os.path.join("product_desc_comparison.html"),
+                    JINJA_FOLDER_PATH,
+                    PRODUCT_DESC_COMPARISON_JINJA_TEMPLATE,
                     {"products": products_with_all_desc},
                 )
                 save_file(
                     comparison_html,
-                    os.path.join("temp", "product_description_comparison.html"),
+                    os.path.join(
+                        TEMP_FOLDER_PATH,
+                        "product_content_comparison.html",
+                    ),
                 )
                 print(f"{product_code} - Added to comparison.")
             except Exception as exc:
