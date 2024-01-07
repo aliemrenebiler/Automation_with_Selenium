@@ -93,14 +93,16 @@ def get_product_url_from_trendyol(
         raise WebDriverError("Could not found Trendyol partner products page.") from exc
 
     try:
-        WebDriverWait(browser, timeout).until(
+        search_input_element = WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
                     '//bl-input[@cy-id="stockCodeFilter"]',
                 )
             )
-        ).send_keys(product_code, Keys.ENTER)
+        )
+        search_input_element.clear()
+        search_input_element.send_keys(product_code, Keys.ENTER)
     except Exception as exc:
         raise WebDriverError(
             "Error during product search on Trendyol partner page."
