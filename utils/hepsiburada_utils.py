@@ -62,6 +62,24 @@ def login_to_hepsiburada(
         raise LoginError("Could not login to Hepsiburada.") from exc
 
 
+def accept_hepsiburada_cookies(browser: WebDriver, timeout: int = 10):
+    "Accepts Hepsiburada cookies"
+
+    try:
+        browser.get("https://www.hepsiburada.com/")
+
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    '//button[@id="onetrust-accept-btn-handler"]',
+                )
+            )
+        ).click()
+    except Exception as exc:
+        raise WebDriverError("Error during accepting Hepsiburada cookies.") from exc
+
+
 def get_product_url_from_hepsiburada(
     browser: WebDriver, product_code: str, timeout: int = 8
 ) -> str | None:
@@ -158,21 +176,3 @@ def get_product_info_from_hepsiburada(
         product_desc = None
 
     return product_name, product_desc
-
-
-def accept_hepsiburada_cookies(browser: WebDriver, timeout: int = 10):
-    "Accepts Hepsiburada cookies"
-
-    try:
-        browser.get("https://www.hepsiburada.com/")
-
-        WebDriverWait(browser, timeout).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//button[@id="onetrust-accept-btn-handler"]',
-                )
-            )
-        ).click()
-    except Exception as exc:
-        raise WebDriverError("Error during accepting Hepsiburada cookies.") from exc
