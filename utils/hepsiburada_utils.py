@@ -81,7 +81,7 @@ def accept_hepsiburada_cookies(browser: WebDriver, timeout: int = 10):
 
 
 def get_product_url_from_hepsiburada(
-    browser: WebDriver, product_code: str, timeout: int = 8
+    browser: WebDriver, product_code: str, timeout: int = 10
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsiburada"
 
@@ -96,19 +96,6 @@ def get_product_url_from_hepsiburada(
         ) from exc
 
     try:
-        WebDriverWait(browser, timeout).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//div[@class="no-data-placeholder"]',
-                )
-            )
-        )
-        return None
-    except Exception:
-        ...
-
-    try:
         product_url = (
             WebDriverWait(browser, timeout)
             .until(
@@ -116,6 +103,12 @@ def get_product_url_from_hepsiburada(
                     (
                         By.XPATH,
                         '//div[contains(@class, "card-text")]//a',
+                    )
+                )
+                or EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//div[@class="no-data-placeholder"]',
                     )
                 )
             )
