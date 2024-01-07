@@ -22,6 +22,7 @@ from utils.omniens_utils import (
     login_to_omniens,
 )
 from utils.trendyol_utils import (
+    accept_trendyol_cookies,
     get_product_info_from_trendyol,
     get_product_url_from_trendyol,
     login_to_trendyol,
@@ -199,6 +200,7 @@ class ProductContentService:
             omniens_credentials.username,
             omniens_credentials.password,
         )
+        accept_trendyol_cookies(browser)
         accept_hepsiburada_cookies(browser)
         for product_code in product_codes:
             try:
