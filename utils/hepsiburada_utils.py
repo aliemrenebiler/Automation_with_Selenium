@@ -108,13 +108,8 @@ def get_product_url_from_hepsiburada(
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        '//div[contains(@class, "card-text")]//a',
-                    )
-                )
-                or EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[@class="no-data-placeholder"]',
+                        '//div[contains(@class, "card-text")]//a'
+                        + ' | //div[@class="no-data-placeholder"]',
                     )
                 )
             )

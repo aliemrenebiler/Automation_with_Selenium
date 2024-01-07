@@ -115,13 +115,7 @@ def get_product_url_from_trendyol(
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        "//sc-product-info",
-                    )
-                )
-                or EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[@class="not_found"]',
+                        '//sc-product-info | //div[@class="not_found"]',
                     )
                 )
             )
