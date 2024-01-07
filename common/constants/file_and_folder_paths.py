@@ -8,15 +8,15 @@ COMPARE_OMNIENS_PRODUCT_INFOS_WITH_TY_AND_HB_CONFIG_FILE_PATH = os.path.join(
     "workflow_configs",
     "compare_omniens_product_infos_with_ty_and_hb.json",
 )
-SAVE_TRENDYOL_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
+SAVE_TY_PARTNER_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
     "config",
     "workflow_configs",
-    "save_trendyol_product_urls_to_excel.json",
+    "save_trendyol_partner_product_urls_to_excel.json",
 )
-SAVE_HEPSIBURADA_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
+SAVE_HB_MERCHANT_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
     "config",
     "workflow_configs",
-    "save_hepsiburada_product_urls_to_excel.json",
+    "save_hepsiburada_merchant_product_urls_to_excel.json",
 )
 
 # Temporary Paths

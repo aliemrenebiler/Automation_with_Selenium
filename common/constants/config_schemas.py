@@ -26,7 +26,7 @@ COMPARE_OMNIENS_PRODUCT_INFOS_WITH_TY_AND_HB_CONFIG_SCHEMA = {
     ],
 }
 
-SAVE_TRENDYOL_PRODUCT_URLS_TO_EXCEL_CONFIG_SCHEMA = {
+SAVE_TY_PARTNER_PRODUCT_URLS_TO_EXCEL_CONFIG_SCHEMA = {
     "type": "object",
     "properties": {
         "trendyol_username": {"type": "string"},
@@ -50,7 +50,7 @@ SAVE_TRENDYOL_PRODUCT_URLS_TO_EXCEL_CONFIG_SCHEMA = {
     ],
 }
 
-SAVE_HEPSIBURADA_PRODUCT_URLS_TO_EXCEL_CONFIG_SCHEMA = {
+SAVE_HB_MERCHANT_PRODUCT_URLS_TO_EXCEL_CONFIG_SCHEMA = {
     "type": "object",
     "properties": {
         "hepsiburada_username": {"type": "string"},
