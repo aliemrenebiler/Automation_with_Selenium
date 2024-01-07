@@ -52,6 +52,18 @@ def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int
         raise LoginError("Could not login to Omniens.") from exc
 
 
+def logged_in_to_omniens(browser: WebDriver, timeout: int = 10) -> bool:
+    "Checks if still logged in to Omniens"
+
+    products_page_url = "https://platform.omniens.com/_product/product/list"
+    try:
+        browser.get(products_page_url)
+        WebDriverWait(browser, timeout).until(EC.url_to_be(products_page_url))
+        return True
+    except Exception:
+        return False
+
+
 def get_product_info_from_omniens(
     browser: WebDriver, product_code: str, timeout: int = 10
 ) -> (str | None, str | None):
