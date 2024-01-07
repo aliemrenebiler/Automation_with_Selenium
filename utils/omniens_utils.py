@@ -94,7 +94,7 @@ def get_product_info_from_omniens(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    f'//tbody//span[contains(text(), "{product_code}")]',
+                    f'//tbody//span[text()=" {product_code} "]',
                 )
             )
         )
