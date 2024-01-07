@@ -228,32 +228,26 @@ class ProductContentService:
                     if product_code in hepsiburada_urls.keys()
                     else (None, None)
                 )
-                if (
-                    trendyol_product_name
-                    or trendyol_product_desc
-                    or hepsiburada_product_name
-                    or hepsiburada_product_desc
-                ):
-                    products_with_all_desc.append(
-                        {
-                            "code": product_code,
-                            "omniens_name": omniens_product_name,
-                            "omniens_desc": omniens_product_desc,
-                            "trendyol_name": trendyol_product_name,
-                            "trendyol_desc": trendyol_product_desc,
-                            "hepsiburada_name": hepsiburada_product_name,
-                            "hepsiburada_desc": hepsiburada_product_desc,
-                        }
-                    )
-                    comparison_html = create_html_from_jinja_template(
-                        os.path.join("templates", "jinja"),
-                        os.path.join("product_desc_comparison.html"),
-                        {"products": products_with_all_desc},
-                    )
-                    save_file(
-                        comparison_html,
-                        os.path.join("temp", "product_description_comparison.html"),
-                    )
+                products_with_all_desc.append(
+                    {
+                        "code": product_code,
+                        "omniens_name": omniens_product_name,
+                        "omniens_desc": omniens_product_desc,
+                        "trendyol_name": trendyol_product_name,
+                        "trendyol_desc": trendyol_product_desc,
+                        "hepsiburada_name": hepsiburada_product_name,
+                        "hepsiburada_desc": hepsiburada_product_desc,
+                    }
+                )
+                comparison_html = create_html_from_jinja_template(
+                    os.path.join("templates", "jinja"),
+                    os.path.join("product_desc_comparison.html"),
+                    {"products": products_with_all_desc},
+                )
+                save_file(
+                    comparison_html,
+                    os.path.join("temp", "product_description_comparison.html"),
+                )
                 print(f"{product_code} - Added to comparison.")
             except Exception as exc:
                 print(f"{product_code} - Error: {str(exc)} ")
