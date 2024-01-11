@@ -10,6 +10,7 @@ from models.account_credentials import AccountCredentials
 from models.errors import ConfigError
 from models.excel import ExcelCells, ExcelFile, ExcelRange
 from services.config_service import ConfigService
+from services.excel_service import ExcelService
 from services.product_content_service import ProductContentService
 from utils.selenium_utils import create_chrome_browser
 
@@ -49,6 +50,7 @@ def _get_configs():
 def compare_omniens_product_infos_with_ty_and_hb():
     "Creates a comparison HTML file for Omniens, Trendyol and Hepsiburada"
 
+    excel_service = ExcelService()
     product_content_service = ProductContentService()
     try:
         print("Getting configurations from file...")
@@ -63,19 +65,19 @@ def compare_omniens_product_infos_with_ty_and_hb():
         browser = create_chrome_browser()
         browser.maximize_window()
         print("Getting product codes from excel file...")
-        product_codes = product_content_service.get_product_codes_from_excel(
+        product_codes = excel_service.get_product_codes_from_excel(
             excel_file,
             excel_product_code_cells,
         )
         print("Getting Trendyol product URLs from excel file...")
-        trendyol_urls = product_content_service.get_product_urls_from_excel(
+        trendyol_urls = excel_service.get_product_urls_from_excel(
             excel_file,
             excel_product_code_cells.row,
             excel_product_code_cells.column,
             excel_trendyol_product_url_column,
         )
         print("Getting Hepsiburada product URLs from excel file...")
-        hepsiburada_urls = product_content_service.get_product_urls_from_excel(
+        hepsiburada_urls = excel_service.get_product_urls_from_excel(
             excel_file,
             excel_product_code_cells.row,
             excel_product_code_cells.column,

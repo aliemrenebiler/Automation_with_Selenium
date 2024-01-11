@@ -10,6 +10,7 @@ from models.account_credentials import AccountCredentials
 from models.errors import ConfigError
 from models.excel import ExcelCells, ExcelFile, ExcelRange
 from services.config_service import ConfigService
+from services.excel_service import ExcelService
 from services.product_content_service import ProductContentService
 from utils.selenium_utils import create_chrome_browser
 
@@ -49,6 +50,7 @@ def _get_configs():
 def save_trendyol_partner_product_urls_to_excel():
     "Gets product codes from excel file, save Trendyol product URLs to the excel file"
 
+    excel_service = ExcelService()
     product_content_service = ProductContentService()
     try:
         print("Getting configurations from file...")
@@ -63,7 +65,7 @@ def save_trendyol_partner_product_urls_to_excel():
         browser = create_chrome_browser()
         browser.maximize_window()
         print("Getting product codes from excel file...")
-        product_codes = product_content_service.get_product_codes_from_excel(
+        product_codes = excel_service.get_product_codes_from_excel(
             excel_file,
             excel_product_code_cells,
         )

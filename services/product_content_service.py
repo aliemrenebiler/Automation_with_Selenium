@@ -2,17 +2,17 @@
 
 import os
 from openpyxl.utils import get_column_letter
+
 from common.constants.file_and_folder_paths import (
     JINJA_FOLDER_PATH,
     PRODUCT_DESC_COMPARISON_JINJA_TEMPLATE,
     TEMP_FOLDER_PATH,
 )
 from models.account_credentials import AccountCredentials
-from models.excel import ExcelFile, ExcelCells, ExcelRange
+from models.excel import ExcelFile
 from models.web_driver import WebDriver
-from utils.excel_utils import get_column_data_from_excel_sheet, open_workbook
+from utils.excel_utils import open_workbook
 from utils.file_utils import save_file
-
 from utils.hepsiburada_utils import (
     get_product_info_from_hepsiburada,
     get_product_url_from_hepsiburada,
@@ -40,61 +40,6 @@ from utils.trendyol_utils import (
 class ProductContentService:
     "Product Content Service Class"
 
-    def get_product_codes_from_excel(
-        self,
-        excel_file: ExcelFile,
-        product_code_cells: ExcelCells,
-    ):
-        "Gets all product codes from specified column and in excel sheet"
-
-        excel_file.workbook = open_workbook(excel_file.file_path)
-        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-
-        product_codes = get_column_data_from_excel_sheet(
-            excel_file.sheet,
-            product_code_cells.column,
-            product_code_cells.row.start,
-            product_code_cells.row.end,
-        )
-
-        excel_file.workbook.close()
-
-        return [str(product_code).strip() for product_code in product_codes]
-
-    def get_product_urls_from_excel(
-        self,
-        excel_file: ExcelFile,
-        product_rows: ExcelRange,
-        product_code_column: int,
-        product_url_column: int,
-    ) -> dict:
-        "Gets all product URLs from specified column and in excel sheet"
-
-        excel_file.workbook = open_workbook(excel_file.file_path)
-        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
-
-        product_codes = get_column_data_from_excel_sheet(
-            excel_file.sheet,
-            product_code_column,
-            product_rows.start,
-            product_rows.end,
-        )
-
-        product_urls = get_column_data_from_excel_sheet(
-            excel_file.sheet,
-            product_url_column,
-            product_rows.start,
-            product_rows.end,
-        )
-
-        excel_file.workbook.close()
-
-        return {
-            str(product_code).strip(): product_urls[i]
-            for i, product_code in enumerate(product_codes)
-            if product_urls[i]
-        }
-
     def save_trendyol_product_urls_to_excel(
         self,
         browser: WebDriver,
@@ -104,7 +49,10 @@ class ProductContentService:
         excel_product_url_column: int,
         excel_product_url_row_start: int,
     ) -> dict:
-        "Gets the product URLs from Trendyol and saves them to excel file"
+        """
+        Gets the product URLs from Trendyol Partner page
+        Saves them to excel file
+        """
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
@@ -149,7 +97,10 @@ class ProductContentService:
         excel_product_url_column: int,
         excel_product_url_row_start: int,
     ) -> dict:
-        "Gets the product URLs from Hepsiburada and saves them to excel file"
+        """
+        Gets the product URLs from Hepsiburada Merchant page
+        Saves them to excel file
+        """
 
         excel_file.workbook = open_workbook(excel_file.file_path)
         excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
