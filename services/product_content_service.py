@@ -11,6 +11,7 @@ from common.constants.file_and_folder_paths import (
 from models.account_credentials import AccountCredentials
 from models.excel import ExcelFile
 from models.web_driver import WebDriver
+from utils.common_utils import create_timestamp
 from utils.excel_utils import open_workbook
 from utils.file_utils import save_file
 from utils.hepsiburada_utils import (
@@ -150,6 +151,7 @@ class ProductContentService:
         Creates an HTML comparison file
         """
 
+        timestamp = create_timestamp()
         omniens_browser = omniens_browser if omniens_browser else browser
         products_with_all_desc = []
 
@@ -208,7 +210,7 @@ class ProductContentService:
                     comparison_html,
                     os.path.join(
                         TEMP_FOLDER_PATH,
-                        "product_content_comparison.html",
+                        f"product_content_comparison_{timestamp}.html",
                     ),
                 )
                 print(f"{product_code} - Added to comparison.")
