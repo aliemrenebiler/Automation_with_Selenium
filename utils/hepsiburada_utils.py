@@ -20,14 +20,18 @@ from models.web_driver import WebDriver
 
 
 def login_to_hepsiburada(
-    browser: WebDriver, email: str, password: str, timeout: int = 300
+    browser: WebDriver,
+    email: str,
+    password: str,
+    timeout: int = 300,
+    page_load_time: float = 5,
 ):
     "Logins to Hepsiburada"
 
     try:
         if browser.current_url != HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL:
             browser.get(HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL)
-            sleep(5)
+            sleep(page_load_time)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
