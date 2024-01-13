@@ -75,14 +75,12 @@ class ProductContentService:
                     product_url if product_url else ""
                 )
                 excel_file.workbook.save(excel_file.file_path)
-                print(
-                    f"{cell_row} - {product_code} - "
-                    + (
-                        f"Trendyol URL: {product_url}"
-                        if product_url
-                        else "Not Found on Trendyol"
-                    )
+                result_message = (
+                    f"Trendyol URL: {product_url}"
+                    if product_url
+                    else "Not Found on Trendyol"
                 )
+                print(f"{cell_row} - {product_code} - {result_message}")
             except Exception as exc:
                 print(f"{cell_row} - {product_code} - Error: {str(exc)}")
         excel_file.workbook.close()
@@ -123,14 +121,12 @@ class ProductContentService:
                     product_url if product_url else ""
                 )
                 excel_file.workbook.save(excel_file.file_path)
-                print(
-                    f"{cell_row} - {product_code} - "
-                    + (
-                        f"Hepsiburada URL: {product_url}"
-                        if product_url
-                        else "Not Found on Hepsiburada"
-                    )
+                result_message = (
+                    f"Hepsiburada URL: {product_url}"
+                    if product_url
+                    else "Not Found on Hepsiburada"
                 )
+                print(f"{cell_row} - {product_code} - {result_message}")
             except Exception as exc:
                 print(f"{cell_row} - {product_code} - Error: {str(exc)}")
         excel_file.workbook.close()
