@@ -1,5 +1,7 @@
 "Hepsiburada Utils"
 
+from time import sleep
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -25,6 +27,7 @@ def login_to_hepsiburada(
     try:
         if browser.current_url != HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL:
             browser.get(HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL)
+            sleep(5)
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -35,16 +38,14 @@ def login_to_hepsiburada(
             )
         ).send_keys(email)
 
-        login_button_element = WebDriverWait(browser, timeout).until(
+        WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
                     '//button[@id="merchant-sign-in-button"]',
                 )
             )
-        )
-        login_button_element.click()
-        login_button_element.click()
+        ).click()
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -55,16 +56,14 @@ def login_to_hepsiburada(
             )
         ).send_keys(password)
 
-        login_button_element = WebDriverWait(browser, timeout).until(
+        WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
                     '//button[@id="merchant-sign-in-button"]',
                 )
             )
-        )
-        login_button_element.click()
-        login_button_element.click()
+        ).click()
 
         WebDriverWait(browser, timeout).until(
             EC.url_to_be(HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL)
