@@ -19,19 +19,19 @@ def main():
     print("=== E-Marketing Management System (EMMA) ===\n")
 
     print("Product Content:")
-    print("[1] Compare Omniens Product Informations With Trendyol And Hepsiburada")
-    print("[2] Save Trendyol Partner Product URLs To Excel")
-    print("[3] Save Hepsiburada Merchant Product URLs To Excel\n")
+    print("[1] Save Trendyol Partner Product URLs To Excel")
+    print("[2] Save Hepsiburada Merchant Product URLs To Excel\n")
+    print("[3] Compare Omniens Product Informations With Trendyol And Hepsiburada")
 
     selection = int(input("Selection: "))
     print()
 
     if selection == 1:
-        compare_omniens_product_infos_with_ty_and_hb()
-    elif selection == 2:
         save_trendyol_partner_product_urls_to_excel()
-    elif selection == 3:
+    elif selection == 2:
         save_hepsiburada_merchant_product_urls_to_excel()
+    if selection == 3:
+        compare_omniens_product_infos_with_ty_and_hb()
     else:
         print("(!) Invalid selection.")
 
