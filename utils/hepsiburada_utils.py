@@ -45,7 +45,7 @@ def login_to_hepsiburada(
                 )
             )
         )
-        action.move_to_element(login_button_element).click().perform()
+        action.double_click(login_button_element).perform()
 
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
@@ -64,7 +64,7 @@ def login_to_hepsiburada(
                 )
             )
         )
-        action.move_to_element(login_button_element).click().perform()
+        action.double_click(login_button_element).perform()
 
         WebDriverWait(browser, timeout).until(
             EC.url_to_be(HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL)
