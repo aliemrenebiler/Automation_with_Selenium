@@ -20,8 +20,8 @@ def main():
 
     print("Product Content:")
     print("[1] Save Trendyol Partner Product URLs To Excel")
-    print("[2] Save Hepsiburada Merchant Product URLs To Excel\n")
-    print("[3] Compare Omniens Product Informations With Trendyol And Hepsiburada")
+    print("[2] Save Hepsiburada Merchant Product URLs To Excel")
+    print("[3] Compare Omniens Product Informations With Trendyol And Hepsiburada\n")
 
     selection = int(input("Selection: "))
     print()
