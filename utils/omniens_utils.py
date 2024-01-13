@@ -5,12 +5,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from common.constants.urls import (
+
+from common.constants.website_urls import (
     OMNIENS_LOGIN_PAGE_URL,
     OMNIENS_PRODUCTS_PAGE_URL,
     OMNIENS_DASHBOARD_PAGE_URL,
 )
-
 from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
 

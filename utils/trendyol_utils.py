@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from common.constants.urls import (
+from common.constants.website_urls import (
     TRENDYOL_MAIN_PAGE_URL,
     TRENDYOL_PARTNER_PRODUCTS_PAGE_URL,
     TRENDYOL_PARTNER_DASHBOARD_PAGE_URL,
@@ -49,8 +49,7 @@ def login_to_trendyol(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    '//button[@class="invisible-captcha-btn btn '
-                    + 'btn-lg btn-mp-primary btn-block g-button -primary"]',
+                    '//button[@class="invisible-captcha-btn btn btn-lg btn-mp-primary btn-block g-button -primary"]',
                 )
             )
         ).click()

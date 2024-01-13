@@ -3,14 +3,14 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from common.constants.urls import (
+
+from common.constants.website_urls import (
     HEPSIBURADA_MAIN_PAGE_URL,
     HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL,
     HEPSIBURADA_MERCHANT_LOGIN_PAGE_URL,
-    HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL,
+    HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL_TEMPLATE,
     HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL,
 )
-
 from models.errors import LoginError, WebDriverError
 from models.web_driver import WebDriver
 
@@ -94,7 +94,9 @@ def get_product_url_from_hepsiburada(
 ) -> str | None:
     "Gets the URL of the product with specified code from Hepsiburada"
 
-    product_search_url = f"{HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL}{product_code}"
+    product_search_url = HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL_TEMPLATE.format(
+        product_code
+    )
     try:
         if browser.current_url != product_search_url:
             browser.get(product_search_url)
@@ -110,8 +112,7 @@ def get_product_url_from_hepsiburada(
                 EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        '//div[contains(@class, "card-text")]//a'
-                        + ' | //div[@class="no-data-placeholder"]',
+                        '//div[contains(@class, "card-text")]//a | //div[@class="no-data-placeholder"]',
                     )
                 )
             )

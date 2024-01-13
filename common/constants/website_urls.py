@@ -26,6 +26,6 @@ HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL = (
 HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL = (
     "https://merchant.hepsiburada.com/v2/listing?tab=onSale"
 )
-HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL = (
-    "https://merchant.hepsiburada.com/v2/listings?tab=all&page=1&pageSize=10&search="
+HEPSIBURADA_MERCHANT_PRODUCT_SEARCH_URL_TEMPLATE = (
+    "https://merchant.hepsiburada.com/v2/listings?tab=all&page=1&pageSize=10&search={}"
 )
