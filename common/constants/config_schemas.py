@@ -1,5 +1,17 @@
 "Configuration Schemas"
 
+GLOBAL_PARAMETERS_CONFIG_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "timeout": {"type": "integer"},
+        "login_timeout": {"type": "integer"},
+    },
+    "required": [
+        "timeout",
+        "login_timeout",
+    ],
+}
+
 COMPARE_OMNIENS_PRODUCT_INFOS_WITH_TY_AND_HB_CONFIG_SCHEMA = {
     "type": "object",
     "properties": {
