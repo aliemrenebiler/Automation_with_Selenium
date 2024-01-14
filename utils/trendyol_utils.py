@@ -19,7 +19,10 @@ from models.web_driver import WebDriver
 
 
 def login_to_trendyol(
-    browser: WebDriver, email: str, password: str, timeout: int = 300
+    browser: WebDriver,
+    email: str,
+    password: str,
+    timeout: int = 10,
 ):
     "Logins to Trendyol"
 

@@ -17,7 +17,12 @@ from models.web_driver import WebDriver
 # pylint: disable=broad-except
 
 
-def login_to_omniens(browser: WebDriver, email: str, password: str, timeout: int = 300):
+def login_to_omniens(
+    browser: WebDriver,
+    email: str,
+    password: str,
+    timeout: int = 10,
+):
     "Logins to Omniens"
 
     try:
