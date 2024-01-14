@@ -70,8 +70,10 @@ def login_to_hepsiburada(
         ).click()
 
         WebDriverWait(browser, timeout).until(
-            EC.url_to_be(HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL)
-            or EC.url_to_be(HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL)
+            EC.any_of(
+                EC.url_to_be(HEPSIBURADA_MERCHANT_DASHBOARD_PAGE_URL),
+                EC.url_to_be(HEPSIBURADA_MERCHANT_REDIRECT_AFTER_LOGIN_PAGE_URL),
+            )
         )
     except Exception as exc:
         raise LoginError("Could not login to Hepsiburada.") from exc
@@ -116,11 +118,13 @@ def get_product_url_from_hepsiburada(
         product_url = (
             WebDriverWait(browser, timeout)
             .until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[contains(@class, "card-text")]//a | //div[@class="no-data-placeholder"]',
-                    )
+                EC.any_of(
+                    EC.presence_of_element_located(
+                        (By.XPATH, '//div[contains(@class, "card-text")]//a')
+                    ),
+                    EC.presence_of_element_located(
+                        (By.XPATH, '//div[@class="no-data-placeholder"]')
+                    ),
                 )
             )
             .get_attribute("href")

@@ -55,8 +55,10 @@ def login_to_trendyol(
         ).click()
 
         WebDriverWait(browser, timeout).until(
-            EC.url_to_be(TRENDYOL_PARTNER_DASHBOARD_PAGE_URL)
-            or EC.url_to_be(TRENDYOL_PARTNER_REDIRECT_AFTER_LOGIN_PAGE_URL)
+            EC.any_of(
+                EC.url_to_be(TRENDYOL_PARTNER_DASHBOARD_PAGE_URL),
+                EC.url_to_be(TRENDYOL_PARTNER_REDIRECT_AFTER_LOGIN_PAGE_URL),
+            )
         )
     except Exception as exc:
         raise LoginError("Could not login to Trendyol.") from exc
@@ -112,11 +114,11 @@ def get_product_url_from_trendyol(
         product_url = (
             WebDriverWait(browser, timeout)
             .until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//sc-product-info | //div[@class="not_found"]',
-                    )
+                EC.any_of(
+                    EC.presence_of_element_located((By.XPATH, "//sc-product-info")),
+                    EC.presence_of_element_located(
+                        (By.XPATH, '//div[@class="not_found"]')
+                    ),
                 )
             )
             .get_attribute("href")
