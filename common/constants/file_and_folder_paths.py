@@ -24,4 +24,4 @@ JINJA_FOLDER_PATH = os.path.join(
     "common",
     "templates",
 )
-PRODUCT_INFO_COMPARISON_JINJA_TEMPLATE = "product_info_comparison_template.html"
+PRODUCT_INFO_COMPARISON_JINJA_TEMPLATE = "product_info_comparison_jinja_template.html"
