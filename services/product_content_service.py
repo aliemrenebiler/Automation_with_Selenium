@@ -5,7 +5,7 @@ from openpyxl.utils import get_column_letter
 
 from common.constants.file_and_folder_paths import (
     JINJA_FOLDER_PATH,
-    PRODUCT_DESC_COMPARISON_JINJA_TEMPLATE,
+    PRODUCT_INFO_COMPARISON_JINJA_TEMPLATE,
     TEMP_FOLDER_PATH,
 )
 from models.account_credentials import AccountCredentials
@@ -199,14 +199,14 @@ class ProductContentService:
                 )
                 comparison_html = create_html_from_jinja_template(
                     JINJA_FOLDER_PATH,
-                    PRODUCT_DESC_COMPARISON_JINJA_TEMPLATE,
+                    PRODUCT_INFO_COMPARISON_JINJA_TEMPLATE,
                     {"products": products_with_all_desc},
                 )
                 save_file(
                     comparison_html,
                     os.path.join(
                         TEMP_FOLDER_PATH,
-                        f"product_content_comparison_{timestamp}.html",
+                        f"product_info_comparison_{timestamp}.html",
                     ),
                 )
                 print(f"{product_code} - Added to comparison.")
