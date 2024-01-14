@@ -14,6 +14,7 @@ from models.web_driver import WebDriver
 from utils.common_utils import create_timestamp
 from utils.excel_utils import open_workbook
 from utils.file_utils import save_file
+from utils.global_parameter_utils import get_global_parameters
 from utils.hepsiburada_utils import (
     get_product_info_from_hepsiburada,
     get_product_url_from_hepsiburada,
@@ -41,6 +42,9 @@ from utils.trendyol_utils import (
 class ProductContentService:
     "Product Content Service Class"
 
+    def __init__(self):
+        self._global_parameters = get_global_parameters()
+
     def save_trendyol_product_urls_to_excel(
         self,
         browser: WebDriver,
@@ -63,12 +67,17 @@ class ProductContentService:
             browser,
             trendyol_credentials.username,
             trendyol_credentials.password,
+            timeout=self._global_parameters.login_timeout,
         )
         cell_column = get_column_letter(excel_product_url_column)
         for i, product_code in enumerate(product_codes):
             cell_row = excel_product_url_row_start + i
             try:
-                product_url = get_product_url_from_trendyol(browser, product_code)
+                product_url = get_product_url_from_trendyol(
+                    browser,
+                    product_code,
+                    timeout=self._global_parameters.timeout,
+                )
                 if product_url:
                     product_url_code_mapping[product_code] = product_url
                 excel_file.sheet[f"{cell_column}{cell_row}"] = (
@@ -109,12 +118,18 @@ class ProductContentService:
             browser,
             hepsiburada_credentials.username,
             hepsiburada_credentials.password,
+            timeout=self._global_parameters.login_timeout,
+            page_load_time=self._global_parameters.page_load_time,
         )
         cell_column = get_column_letter(excel_product_url_column)
         for i, product_code in enumerate(product_codes):
             cell_row = excel_product_url_row_start + i
             try:
-                product_url = get_product_url_from_hepsiburada(browser, product_code)
+                product_url = get_product_url_from_hepsiburada(
+                    browser,
+                    product_code,
+                    timeout=self._global_parameters.timeout,
+                )
                 if product_url:
                     product_url_code_mapping[product_code] = product_url
                 excel_file.sheet[f"{cell_column}{cell_row}"] = (
@@ -155,6 +170,7 @@ class ProductContentService:
             omniens_browser,
             omniens_credentials.username,
             omniens_credentials.password,
+            timeout=self._global_parameters.login_timeout,
         )
         accept_trendyol_cookies(browser)
         accept_hepsiburada_cookies(browser)
@@ -165,15 +181,21 @@ class ProductContentService:
                         omniens_browser,
                         omniens_credentials.username,
                         omniens_credentials.password,
+                        timeout=self._global_parameters.login_timeout,
                     )
                 (
                     omniens_product_name,
                     omniens_product_desc,
-                ) = get_product_info_from_omniens(omniens_browser, product_code)
+                ) = get_product_info_from_omniens(
+                    omniens_browser,
+                    product_code,
+                    timeout=self._global_parameters.timeout,
+                )
                 (trendyol_product_name, trendyol_product_desc) = (
                     get_product_info_from_trendyol(
                         browser,
                         trendyol_urls[product_code],
+                        timeout=self._global_parameters.timeout,
                     )
                     if product_code in trendyol_urls.keys()
                     else (None, None)
@@ -182,6 +204,7 @@ class ProductContentService:
                     get_product_info_from_hepsiburada(
                         browser,
                         hepsiburada_urls[product_code],
+                        timeout=self._global_parameters.timeout,
                     )
                     if product_code in hepsiburada_urls.keys()
                     else (None, None)
