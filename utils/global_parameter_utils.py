@@ -27,3 +27,4 @@ def set_global_parameters():
 
     global_parameters.timeout = configs["timeout"]
     global_parameters.login_timeout = configs["login_timeout"]
+    global_parameters.page_load_time = configs["page_load_time"]

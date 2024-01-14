@@ -1,4 +1,5 @@
 {
     "timeout": 10,
-    "login_timeout": 300
+    "login_timeout": 300,
+    "page_load_time": 10
 }

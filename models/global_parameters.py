@@ -10,6 +10,8 @@ class GlobalParameters:
         self,
         timeout: int = None,
         login_timeout: int = None,
+        page_load_time: int = None,
     ):
-        self.timeout: timeout
-        self.login_timeout: login_timeout
+        self.timeout = timeout
+        self.login_timeout = login_timeout
+        self.page_load_time = page_load_time
