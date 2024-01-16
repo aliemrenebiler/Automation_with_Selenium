@@ -183,41 +183,59 @@ class ProductContentService:
                         omniens_credentials.password,
                         timeout=self._global_parameters.login_timeout,
                     )
-                (
-                    omniens_product_name,
-                    omniens_product_desc,
-                ) = get_product_info_from_omniens(
-                    omniens_browser,
-                    product_code,
-                    timeout=self._global_parameters.timeout,
-                )
-                (trendyol_product_name, trendyol_product_desc) = (
-                    get_product_info_from_trendyol(
-                        browser,
-                        trendyol_urls[product_code],
+                try:
+                    (
+                        omniens_product_name,
+                        omniens_product_desc,
+                    ) = get_product_info_from_omniens(
+                        omniens_browser,
+                        product_code,
                         timeout=self._global_parameters.timeout,
                     )
-                    if product_code in trendyol_urls.keys()
-                    else (None, None)
-                )
-                (hepsiburada_product_name, hepsiburada_product_desc) = (
-                    get_product_info_from_hepsiburada(
-                        browser,
-                        hepsiburada_urls[product_code],
-                        timeout=self._global_parameters.timeout,
+                    omniens_product_error = None
+                except Exception as exc:
+                    omniens_product_name, omniens_product_desc = None, None
+                    omniens_product_error = str(exc)
+                try:
+                    (trendyol_product_name, trendyol_product_desc) = (
+                        get_product_info_from_trendyol(
+                            browser,
+                            trendyol_urls[product_code],
+                            timeout=self._global_parameters.timeout,
+                        )
+                        if product_code in trendyol_urls.keys()
+                        else (None, None)
                     )
-                    if product_code in hepsiburada_urls.keys()
-                    else (None, None)
-                )
+                    trendyol_product_error = None
+                except Exception as exc:
+                    trendyol_product_name, trendyol_product_desc = None, None
+                    trendyol_product_error = str(exc)
+                try:
+                    (hepsiburada_product_name, hepsiburada_product_desc) = (
+                        get_product_info_from_hepsiburada(
+                            browser,
+                            hepsiburada_urls[product_code],
+                            timeout=self._global_parameters.timeout,
+                        )
+                        if product_code in hepsiburada_urls.keys()
+                        else (None, None)
+                    )
+                    hepsiburada_product_error = None
+                except Exception as exc:
+                    hepsiburada_product_name, hepsiburada_product_desc = None, None
+                    hepsiburada_product_error = str(exc)
                 products_with_all_desc.append(
                     {
                         "code": product_code,
                         "omniens_name": omniens_product_name,
                         "omniens_desc": omniens_product_desc,
+                        "omniens_error": omniens_product_error,
                         "trendyol_name": trendyol_product_name,
                         "trendyol_desc": trendyol_product_desc,
+                        "trendyol_error": trendyol_product_error,
                         "hepsiburada_name": hepsiburada_product_name,
                         "hepsiburada_desc": hepsiburada_product_desc,
+                        "hepsiburada_error": hepsiburada_product_error,
                     }
                 )
                 comparison_html = create_html_from_jinja_template(
