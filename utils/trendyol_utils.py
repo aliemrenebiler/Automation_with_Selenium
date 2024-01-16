@@ -141,19 +141,14 @@ def get_product_info_from_trendyol(
         if browser.current_url != product_url:
             browser.get(product_url)
     except Exception as exc:
-        raise WebDriverError(
-            "Could not get product information, could not reach Trendyol product page."
-        ) from exc
+        raise WebDriverError("Could not reach Trendyol product page.") from exc
 
     try:
         product_name_brand = (
             WebDriverWait(browser, timeout)
             .until(
                 EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//a[@class="product-brand-name-with-link"]',
-                    )
+                    (By.XPATH, '//a[@class="product-brand-name-with-link"]')
                 )
             )
             .text
@@ -184,10 +179,7 @@ def get_product_info_from_trendyol(
             WebDriverWait(browser, timeout)
             .until(
                 EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[@class="info-wrapper"]',
-                    )
+                    (By.XPATH, '//div[@class="info-wrapper"]')
                 )
             )
             .find_elements(By.XPATH, "*")

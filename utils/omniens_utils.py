@@ -11,7 +11,7 @@ from common.constants.website_urls import (
     OMNIENS_PRODUCTS_PAGE_URL,
     OMNIENS_DASHBOARD_PAGE_URL,
 )
-from models.errors import LoginError, WebDriverError
+from models.errors import LoginError, NotFoundError, WebDriverError
 from models.web_driver import WebDriver
 
 # pylint: disable=broad-except
@@ -81,42 +81,34 @@ def get_product_info_from_omniens(
         if browser.current_url != OMNIENS_PRODUCTS_PAGE_URL:
             browser.get(OMNIENS_PRODUCTS_PAGE_URL)
     except Exception as exc:
-        raise WebDriverError(
-            "Could not get product information, could not reach Omniens product page."
-        ) from exc
+        raise WebDriverError("Could not reach Omniens product page.") from exc
 
-    action = ActionChains(browser)
     try:
         WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//input[@placeholder="anahtar kelime aratın"]',
-                )
+                (By.XPATH, '//input[@placeholder="anahtar kelime aratın"]')
             )
         ).send_keys(product_code, Keys.ENTER)
+    except Exception as exc:
+        raise WebDriverError("Could not search product on Omniens.") from exc
 
+    action = ActionChains(browser)
+    try:
         product_element = WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    f'//tbody//span[normalize-space(text())="{product_code}"]',
-                )
+                (By.XPATH, f'//tbody//span[normalize-space(text())="{product_code}"]')
             )
         )
         action.double_click(product_element).perform()
     except Exception as exc:
-        raise WebDriverError("Could not get product element on Omniens.") from exc
+        raise NotFoundError("Product not found on Omniens.") from exc
 
     try:
         product_name = (
             WebDriverWait(browser, timeout)
             .until(
                 EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//input[@placeholder="Ürün Adı"]',
-                    )
+                    (By.XPATH, '//input[@placeholder="Ürün Adı"]')
                 )
             )
             .get_attribute("value")
@@ -127,10 +119,7 @@ def get_product_info_from_omniens(
     try:
         product_desc_element = WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    '//div[@class="angular-editor-textarea"]',
-                )
+                (By.XPATH, '//div[@class="angular-editor-textarea"]')
             )
         )
 

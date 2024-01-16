@@ -144,20 +144,13 @@ def get_product_info_from_hepsiburada(
         if browser.current_url != product_url:
             browser.get(product_url)
     except Exception as exc:
-        raise WebDriverError(
-            "Could not get product information, could not reach Hepsiburada product page."
-        ) from exc
+        raise WebDriverError("Could not reach Hepsiburada product page.") from exc
 
     try:
         product_name = (
             WebDriverWait(browser, timeout)
             .until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//h1[@id="product-name"]',
-                    )
-                )
+                EC.presence_of_element_located((By.XPATH, '//h1[@id="product-name"]'))
             )
             .text
         )
@@ -169,10 +162,7 @@ def get_product_info_from_hepsiburada(
             WebDriverWait(browser, timeout)
             .until(
                 EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        '//div[@id="productDescriptionContent"]',
-                    )
+                    (By.XPATH, '//div[@id="productDescriptionContent"]')
                 )
             )
             .find_elements(By.XPATH, "*")
