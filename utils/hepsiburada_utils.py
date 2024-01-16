@@ -23,8 +23,8 @@ def login_to_hepsiburada(
     browser: WebDriver,
     email: str,
     password: str,
-    timeout: int = 300,
-    page_load_time: float = 5,
+    timeout: int = 10,
+    page_load_time: int = 10,
 ):
     "Logins to Hepsiburada"
 
