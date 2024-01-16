@@ -8,8 +8,8 @@ This is an excel file generator for bathroom products.
 
 ## To-Do:
 
-[ ] Add timeout to configurations as optional configuration
-[ ] Comparison creation must be fixed for not-found content on Omniens
+[x] Add timeout to configurations as optional configuration
+[x] Comparison creation must be fixed for not-found content on Omniens
 [ ] Update get_product_urls.py code with the new structure
 [ ] Update README.md for new structure
 
