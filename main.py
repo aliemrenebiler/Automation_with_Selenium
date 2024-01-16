@@ -36,7 +36,7 @@ def main():
         save_trendyol_partner_product_urls_to_excel()
     elif selection == 2:
         save_hepsiburada_merchant_product_urls_to_excel()
-    if selection == 3:
+    elif selection == 3:
         compare_omniens_product_infos_with_ty_and_hb()
     else:
         print("(!) Invalid selection.")
