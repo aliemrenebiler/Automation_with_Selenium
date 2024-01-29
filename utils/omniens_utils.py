@@ -149,11 +149,13 @@ def get_product_name_from_omniens(
         raise WebDriverError("Could not reach Omniens product page.") from exc
 
     try:
-        WebDriverWait(browser, timeout).until(
+        search_input_element = WebDriverWait(browser, timeout).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//input[@placeholder="anahtar kelime aratın"]')
             )
-        ).send_keys(product_code, Keys.ENTER)
+        )
+        search_input_element.send_keys(Keys.CONTROL + "A", Keys.BACK_SPACE)
+        search_input_element.send_keys(product_code, Keys.ENTER)
     except Exception as exc:
         raise WebDriverError("Could not search product on Omniens.") from exc
 
