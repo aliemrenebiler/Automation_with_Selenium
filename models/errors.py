@@ -18,6 +18,14 @@ class NotFoundError(GenericError):
         super().__init__(self.message)
 
 
+class NullError(GenericError):
+    "Null Error"
+
+    def __init__(self, message: str = ""):
+        self.message = message
+        super().__init__(self.message)
+
+
 class ConfigError(GenericError):
     "Config Error"
 
