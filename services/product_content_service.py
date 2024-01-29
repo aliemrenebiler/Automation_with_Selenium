@@ -24,6 +24,7 @@ from utils.hepsiburada_utils import (
 from utils.jinja_utils import create_html_from_jinja_template
 from utils.omniens_utils import (
     get_product_info_from_omniens,
+    get_product_name_from_omniens,
     logged_in_to_omniens,
     login_to_omniens,
 )
@@ -253,3 +254,54 @@ class ProductContentService:
                 print(f"{product_code} - Added to comparison.")
             except Exception as exc:
                 print(f"{product_code} - Error: {str(exc)} ")
+
+    def save_omniens_product_names_to_excel(
+        self,
+        browser: WebDriver,
+        omniens_credentials: AccountCredentials,
+        product_codes: [str],
+        excel_file: ExcelFile,
+        excel_product_name_column: int,
+        excel_product_name_row_start: int,
+    ):
+        """
+        Gets the product names from Omniens
+        Saves them to excel file
+        """
+
+        excel_file.workbook = open_workbook(excel_file.file_path)
+        excel_file.sheet = excel_file.workbook[excel_file.sheet_name]
+        product_name_code_mapping = {}
+
+        login_to_omniens(
+            browser,
+            omniens_credentials.username,
+            omniens_credentials.password,
+            timeout=self._global_parameters.login_timeout,
+        )
+        cell_column = get_column_letter(excel_product_name_column)
+        for i, product_code in enumerate(product_codes):
+            cell_row = excel_product_name_row_start + i
+            try:
+                product_name = get_product_name_from_omniens(
+                    browser,
+                    product_code,
+                    timeout=self._global_parameters.timeout,
+                )
+                if product_name:
+                    product_name_code_mapping[product_code] = product_name
+                excel_file.sheet[f"{cell_column}{cell_row}"] = (
+                    product_name if product_name else ""
+                )
+                excel_file.workbook.save(excel_file.file_path)
+                result_message = (
+                    f"Omniens Name: {product_name}"
+                    if product_name
+                    else "Not Found on Omniens"
+                )
+                print(f"{cell_row} - {product_code} - {result_message}")
+            except Exception as exc:
+                print(f"{cell_row} - {product_code} - Error: {str(exc)}")
+        excel_file.workbook.close()
+
+        return product_name_code_mapping
