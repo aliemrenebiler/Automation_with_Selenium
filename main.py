@@ -7,6 +7,9 @@ from workflows.compare_omniens_product_infos_with_ty_and_hb import (
 from workflows.save_hepsiburada_merchant_product_urls_to_excel import (
     save_hepsiburada_merchant_product_urls_to_excel,
 )
+from workflows.save_omniens_product_names_to_excel import (
+    save_omniens_product_names_to_excel,
+)
 from workflows.save_trendyol_partner_product_urls_to_excel import (
     save_trendyol_partner_product_urls_to_excel,
 )
@@ -27,7 +30,8 @@ def main():
     print("Product Content:")
     print("[1] Save Trendyol Partner Product URLs To Excel")
     print("[2] Save Hepsiburada Merchant Product URLs To Excel")
-    print("[3] Compare Omniens Product Informations With Trendyol And Hepsiburada\n")
+    print("[3] Compare Omniens Product Informations With Trendyol And Hepsiburada")
+    print("[4] Save Omniens Product Names To Excel\n")
 
     selection = int(input("Selection: "))
     print()
@@ -38,6 +42,8 @@ def main():
         save_hepsiburada_merchant_product_urls_to_excel()
     elif selection == 3:
         compare_omniens_product_infos_with_ty_and_hb()
+    elif selection == 4:
+        save_omniens_product_names_to_excel()
     else:
         print("(!) Invalid selection.")
 
