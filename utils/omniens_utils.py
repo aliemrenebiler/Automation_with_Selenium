@@ -135,3 +135,51 @@ def get_product_info_from_omniens(
         product_desc = None
 
     return product_name, product_desc
+
+
+def get_product_name_from_omniens(
+    browser: WebDriver, product_code: str, timeout: int = 10
+) -> (str | None, str | None):
+    "Gets the product name and description on Omniens"
+
+    try:
+        if browser.current_url != OMNIENS_PRODUCTS_PAGE_URL:
+            browser.get(OMNIENS_PRODUCTS_PAGE_URL)
+    except Exception as exc:
+        raise WebDriverError("Could not reach Omniens product page.") from exc
+
+    try:
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//input[@placeholder="anahtar kelime aratın"]')
+            )
+        ).send_keys(product_code, Keys.ENTER)
+    except Exception as exc:
+        raise WebDriverError("Could not search product on Omniens.") from exc
+
+    try:
+        WebDriverWait(browser, timeout).until(
+            EC.presence_of_element_located(
+                (By.XPATH, f'//tbody//span[normalize-space(text())="{product_code}"]')
+            )
+        )
+    except Exception as exc:
+        raise NotFoundError("Product not found on Omniens.") from exc
+
+    try:
+        product_name = (
+            WebDriverWait(browser, timeout)
+            .until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        '//td[contains(@class, "cdk-column-name")]//span[@class="ng-star-inserted"]',
+                    )
+                )
+            )
+            .text
+        )
+    except Exception:
+        product_name = None
+
+    return product_name
