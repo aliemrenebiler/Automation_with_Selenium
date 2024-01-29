@@ -26,7 +26,10 @@ class ExcelService:
 
         excel_file.workbook.close()
 
-        return [str(product_code).strip() for product_code in product_codes]
+        return [
+            str(product_code).strip() if product_code else ""
+            for product_code in product_codes
+        ]
 
     def get_product_urls_from_excel(
         self,
