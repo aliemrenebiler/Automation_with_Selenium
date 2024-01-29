@@ -9,6 +9,7 @@ from common.constants.file_and_folder_paths import (
     TEMP_FOLDER_PATH,
 )
 from models.account_credentials import AccountCredentials
+from models.errors import NullError
 from models.excel import ExcelFile
 from models.web_driver import WebDriver
 from utils.common_utils import create_timestamp
@@ -283,6 +284,8 @@ class ProductContentService:
         for i, product_code in enumerate(product_codes):
             cell_row = excel_product_name_row_start + i
             try:
+                if not product_code:
+                    raise NullError
                 product_name = get_product_name_from_omniens(
                     browser,
                     product_code,
@@ -300,6 +303,8 @@ class ProductContentService:
                     else "Not Found on Omniens"
                 )
                 print(f"{cell_row} - {product_code} - {result_message}")
+            except NullError:
+                print(f"{cell_row} - Empty line.")
             except Exception as exc:
                 print(f"{cell_row} - {product_code} - Error: {str(exc)}")
         excel_file.workbook.close()
