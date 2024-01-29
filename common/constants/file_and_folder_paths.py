@@ -15,6 +15,9 @@ SAVE_TY_PARTNER_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
 SAVE_HB_MERCHANT_PRODUCT_URLS_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
     "configs", "save_hepsiburada_merchant_product_urls_to_excel.json"
 )
+SAVE_OMNIENS_PRODUCT_NAMES_TO_EXCEL_CONFIG_FILE_PATH = os.path.join(
+    "configs", "save_omniens_product_names_to_excel.json"
+)
 
 # Temporary Paths
 TEMP_FOLDER_PATH = "temp"
