@@ -10,7 +10,7 @@ This is an excel file generator for bathroom products.
 
 [x] Add timeout to configurations as optional configuration
 [x] Comparison creation must be fixed for not-found content on Omniens
-[ ] New workflow to find product names on Omniens
+[x] New workflow to find product names on Omniens
 [ ] Update get_product_urls.py code with the new structure
 [ ] Update README.md for new structure
 
